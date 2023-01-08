@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Java ###
+/src/main/java/laustrup/bandwichpersistencedebugging/miscs/Crate.java
+
+### SQL ###
+/src/main/resources/sqls/default_values.sql
+
+### Spring properties ###
+/src/main/resources/application.properties
