@@ -7,27 +7,27 @@ import laustrup.bandwichpersistencedebugging.services.persistence_services.assem
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SearchTests extends JTest {
 
     @Test
     void canSearch() {
         //ARRANGE
-        String query = RandomCreatorService.get_instance().generateString();
-        Search search;
-        int tries = 0;
+        String query = RandomCreatorService.get_instance().generateSubString(
+                Assembly.get_instance().getUser(1).get_username()
+        );
+        if (query == null)
+            query = RandomCreatorService.get_instance().generateSubString(
+                    Assembly.get_instance().getEvent(1).get_title()
+            );
+        if (query == null)
+            fail();
 
         //ACT
-        do {
-            begin();
-            search = Assembly.get_instance().search(query);
-            calculatePerformance("search " + query + " try " + tries);
-            if (tries > 100)
-                break;
-            query = RandomCreatorService.get_instance().generateString();
-            tries++;
-        } while (search == null);
+        begin();
+        Search search = Assembly.get_instance().search(query);
+        calculatePerformance("search " + query);
 
         //ARRANGE
         assertTrue(search != null && (!search.get_events().isEmpty() || !search.get_users().isEmpty()));

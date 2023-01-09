@@ -202,7 +202,7 @@ public class TestItems extends JTest {
                     new Participant(), LocalDateTime.now());
     }
 
-    private Liszt<AlbumItem> generateAlbumItems() {
+    public Liszt<AlbumItem> generateAlbumItems() {
         Liszt<AlbumItem> items = new Liszt<>();
         for (int i = 1; i <= _random.nextInt(10)+1;i++) {
             AlbumItem.Kind kind = _random.nextBoolean() ? AlbumItem.Kind.MUSIC : AlbumItem.Kind.IMAGE;
@@ -298,7 +298,7 @@ public class TestItems extends JTest {
         }
     }
 
-    private Subscription setupSubscription(User user) {
+    public Subscription setupSubscription(User user) {
         Subscription.Type type = _random.nextBoolean() ? Subscription.Type.PREMIUM_ARTIST : Subscription.Type.PREMIUM_BAND;
         type = _random.nextBoolean() ? type : Subscription.Type.FREEMIUM;
         return new Subscription(user, type, Subscription.Status.ACCEPTED, new SubscriptionOffer(TimeService.get_instance().generateRandom(),

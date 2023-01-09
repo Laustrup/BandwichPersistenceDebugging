@@ -24,6 +24,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Asserter {
 
     /**
+     * Asserts two Users to check they are the same.
+     * @param expected The User that is arranged and defined.
+     * @param actual The User that is the result of an action.
+     * @param authority The authority of both Users.
+     */
+    protected void asserting(User expected, User actual, User.Authority authority) {
+        switch (authority) {
+            case PARTICIPANT -> assertParticipants((Participant) expected, (Participant) actual);
+            case BAND -> assertBands((Band) expected,(Band) actual);
+            case ARTIST -> assertArtists((Artist) expected,(Artist) actual);
+            case VENUE -> assertVenues((Venue) expected,(Venue) actual);
+            default -> fail();
+        }
+    }
+
+    /**
      * Asserts two Participants to check they are the same.
      * @param expected The Participant that is arranged and defined.
      * @param actual The Participant that is the result of an action.
@@ -122,7 +138,7 @@ public class Asserter {
      * @param expectations The Albums that are arranged and defined.
      * @param actuals The Albums that are the result of an action.
      */
-    private void assertAlbums(Liszt<Album> expectations, Liszt<Album> actuals) {
+    protected void assertAlbums(Liszt<Album> expectations, Liszt<Album> actuals) {
         if (expectations.size() == actuals.size()) {
             for (int i = 1; i <= expectations.size(); i++) {
                 Album expected = expectations.get(i),
@@ -147,7 +163,7 @@ public class Asserter {
      * @param expectations The Ratings that are arranged and defined.
      * @param actuals The Ratings that are the result of an action.
      */
-    private void assertRatings(Liszt<Rating> expectations, Liszt<Rating> actuals) {
+    protected void assertRatings(Liszt<Rating> expectations, Liszt<Rating> actuals) {
         if (expectations.size() == actuals.size()) {
             for (int i = 1; i <= expectations.size(); i++) {
                 Rating expected = expectations.get(i),
@@ -167,7 +183,7 @@ public class Asserter {
      * @param expectations The ChatRooms that are arranged and defined.
      * @param actuals The ChatRooms that are the result of an action.
      */
-    private void assertChatRooms(Liszt<ChatRoom> expectations, Liszt<ChatRoom> actuals) {
+    protected void assertChatRooms(Liszt<ChatRoom> expectations, Liszt<ChatRoom> actuals) {
         if (expectations.size() == actuals.size()) {
             for (int i = 1; i <= expectations.size(); i++) {
                 ChatRoom expected = expectations.get(i),
@@ -187,7 +203,7 @@ public class Asserter {
      * @param expectations The Mails that are arranged and defined.
      * @param actuals The Mails that are the result of an action.
      */
-    private void assertMails(Liszt<Mail> expectations, Liszt<Mail> actuals) {
+    protected void assertMails(Liszt<Mail> expectations, Liszt<Mail> actuals) {
         if (expectations.size() == actuals.size()) {
             for (int i = 1; i <= expectations.size(); i++) {
                 Mail expected = expectations.get(i),

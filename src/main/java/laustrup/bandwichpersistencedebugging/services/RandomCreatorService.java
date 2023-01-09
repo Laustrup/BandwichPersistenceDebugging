@@ -29,12 +29,45 @@ public class RandomCreatorService {
     private RandomCreatorService() {}
 
     /**
-     * Generates a random string.
+     * Generates a random string from a - z.
      * @return The generated string.
      */
     public String generateString() {
-        byte[] array = new byte[this._random.nextInt(128*4)];
-        this._random.nextBytes(array);
-        return new String(array, StandardCharsets.UTF_8);
+        int min = 97, // letter a
+            max = 122, // letter z
+            length = 28*2;
+        StringBuilder buffer = new StringBuilder(length);
+
+        for (int i = 0; i < 28*2; i++)
+            buffer.append((char) (min + (int) (_random.nextFloat() * (max - min + 1))));
+
+        return buffer.toString();
+    }
+
+    /**
+     * Will generate a substring from another String.
+     * @param string The String that the substring will be generated from.
+     * @return The generated substring.
+     */
+    public String generateSubString(String string) {
+        int start = _random.nextInt(string.length());
+        int end = _random.nextInt(string.length())+1;
+        return string.substring(start,end);
+    }
+
+    /**
+     * Generates an integer into a new integer, that isn't with the same value.
+     * @param integer The integer current value.
+     * @param bound The limit of the highest possible value.
+     * @return The generated integer. If bound isn't larger than 1, it will return the same integer value.
+     */
+    public int generateDifferent(int integer, int bound) {
+        int generated = _random.nextInt(bound);
+
+        if (bound > 1)
+            while (generated == integer)
+                generated = _random.nextInt(bound);
+
+        return generated;
     }
 }

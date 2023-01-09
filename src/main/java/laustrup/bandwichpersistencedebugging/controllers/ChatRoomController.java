@@ -17,7 +17,7 @@ public class ChatRoomController {
 
     private final String _endpointDirectory = "/api/chat_room/";
 
-    @PutMapping(value = _endpointDirectory + "upsert", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = _endpointDirectory + "/mail/upsert", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<ChatRoom>> upsert(@RequestBody Mail mail) {
         return ChatRoomControllerService.get_instance().upsert(new Mail(
                 mail.get_primaryId(),mail.get_chatRoom(),mail.get_author(),

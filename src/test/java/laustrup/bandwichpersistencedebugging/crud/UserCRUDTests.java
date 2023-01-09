@@ -1,19 +1,236 @@
 package laustrup.bandwichpersistencedebugging.crud;
 
 import laustrup.bandwichpersistencedebugging.JTest;
+import laustrup.bandwichpersistencedebugging.models.Rating;
+import laustrup.bandwichpersistencedebugging.models.albums.Album;
+import laustrup.bandwichpersistencedebugging.models.chats.ChatRoom;
+import laustrup.bandwichpersistencedebugging.models.chats.messages.Bulletin;
+import laustrup.bandwichpersistencedebugging.models.chats.messages.Mail;
+import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.users.Login;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Artist;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.venues.Venue;
+import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Card;
+import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Subscription;
+import laustrup.bandwichpersistencedebugging.models.users.subscriptions.SubscriptionOffer;
+import laustrup.bandwichpersistencedebugging.services.RandomCreatorService;
+import laustrup.bandwichpersistencedebugging.services.TimeService;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.assembling_services.Assembly;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.entity_services.sub_entity_services.*;
+import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserCRUDTests extends JTest {
+
+    @Test
+    void canReadAllUsers() {
+        //ACT
+        Liszt<User> users = Assembly.get_instance().getUsers();
+        calculatePerformance("read all users");
+
+        //ASSERT
+        assertTrue(users != null && !users.isEmpty());
+    }
+
+    @Test
+    void canUpsertBulletin() {
+        //ARRANGE
+        Bulletin expected = _items.generateBulletins(Assembly.get_instance().getEvent(0))[0];
+
+        //ACT
+        begin();
+        User user = UserPersistenceService.get_instance().upsert(expected);
+        calculatePerformance("upsert insert bulletin");
+
+        //ASSERT
+        assertBulletins(new Liszt<>(new Bulletin[]{expected}), new Liszt<>(new Bulletin[]{user.get_bulletins().getLast()}));
+
+        //ARRANGE
+        expected.set_content("This is new content");
+
+        //ACT
+        begin();
+        user = UserPersistenceService.get_instance().upsert(expected);
+        calculatePerformance("upsert update bulletin");
+
+        //ASSERT
+        assertBulletins(new Liszt<>(new Bulletin[]{expected}), new Liszt<>(new Bulletin[]{user.get_bulletins().getLast()}));
+    }
+
+    @Test
+    void canUpsertRating() {
+        //ARRANGE
+        Rating expected = new Rating(
+                _random.nextInt(5)+1,
+                Assembly.get_instance().getUser(1),
+                Assembly.get_instance().getUser(2),
+                LocalDateTime.now()
+        );
+
+        //ACT
+        begin();
+        User user = UserPersistenceService.get_instance().upsert(expected);
+        calculatePerformance("upsert insert rating");
+
+        //ASSERT
+        assertRatings(new Liszt<>(new Rating[]{expected}), new Liszt<>(new Rating[]{user.get_ratings().getLast()}));
+
+        //ARRANGE
+        expected.set_value(RandomCreatorService.get_instance().generateDifferent(expected.get_value(),5+1));
+
+        //ACT
+        begin();
+        user = UserPersistenceService.get_instance().upsert(expected);
+        calculatePerformance("upsert update rating");
+
+        //ASSERT
+        assertRatings(new Liszt<>(new Rating[]{expected}), new Liszt<>(new Rating[]{user.get_ratings().getLast()}));
+    }
+
+    @Test
+    void canUpsertAlbum() {
+        //ARRANGE
+        Album expected = new Album("Test album", _items.generateAlbumItems(), Assembly.get_instance().getUser(1));
+
+        //ACT
+        begin();
+        User user = UserPersistenceService.get_instance().upsert(expected);
+        calculatePerformance();
+
+        //ARRANGE
+        assertAlbums(new Liszt<>(new Album[]{expected}), new Liszt<>(new Album[]{user.get_albums().getLast()}));
+    }
+
+    @Test
+    void canFollowAndUnfollow() {
+        //ARRANGE
+        User fan = Assembly.get_instance().getUser(1),
+            idol = Assembly.get_instance().getUser(2);
+
+        //ACT
+        begin();
+        User[] acts = UserPersistenceService.get_instance().follow(fan, idol);
+        calculatePerformance("following");
+
+        //ASSERT
+        assertTrue(acts != null && acts.length == 2);
+
+        //ACT
+        begin();
+        acts = UserPersistenceService.get_instance().unfollow(fan, idol);
+        calculatePerformance("unfollowing");
+
+        //ASSERT
+        assertTrue(acts != null && acts.length == 2);
+    }
+
+    @Test
+    void canUpdateUser() {
+        //ARRANGE
+        User expected = Assembly.get_instance().getUser(1);
+        String prevDescription = expected.get_description(),
+            postDescription = "This is a new description",
+            password = "laust_er_sej1";
+
+        //ACT
+        expected.set_description(postDescription);
+        begin();
+        User actual = UserPersistenceService.get_instance().update(
+                expected,
+                new Login(expected.get_username(),password),
+                _password
+        );
+        calculatePerformance();
+
+        //ASSERT
+        asserting(expected,actual,expected.get_authority());
+
+
+        expected.set_description(prevDescription);
+        UserPersistenceService.get_instance().update(
+                expected,
+                new Login(expected.get_username(),_password),
+                password
+        );
+    }
+
+    //TODO Fix test of card
+    @Test
+    void canUpsertSubscription() {
+        //ARRANGE
+        User expected = Assembly.get_instance().getUser(1);
+        String password = "laust_er_sej1";
+        Subscription.Status prevStatus = expected.get_subscription().get_status(),
+            postStatus = Subscription.Status.BLOCKED;
+        expected.get_subscription().set_status(postStatus);
+
+        //ACT
+        begin();
+        User actual = UserPersistenceService.get_instance().upsert(expected, new Login(expected.get_username(),password),null);
+        calculatePerformance();
+
+        //ASSERT
+        asserting(expected,actual,expected.get_authority());
+
+        expected.get_subscription().set_status(prevStatus);
+        UserPersistenceService.get_instance().upsert(expected, new Login(expected.get_username(),password),null);
+    }
+
+    @Test
+    void canUpsertChatRoomAndMail() {
+        //ARRANGE
+        String prevTitle = "Test chat room",
+                postTitle = "New chat room",
+                prevContent = "This is test content",
+                postContent = "Changed content";
+
+        User chatter = Assembly.get_instance().getUser(1),
+            responsible = Assembly.get_instance().getUser(2);
+        ChatRoom expectedChatRoom = new ChatRoom(prevTitle,new Liszt<>(new User[]{chatter}),responsible);
+        Mail expectedMail = new Mail(expectedChatRoom,chatter);
+
+        //ACT
+        begin();
+        ChatRoom actual = UserPersistenceService.get_instance().upsert(expectedChatRoom);
+        calculatePerformance("upsert insert chat room");
+
+        //ASSERT
+        assertChatRooms(new Liszt<>(new ChatRoom[]{expectedChatRoom}), new Liszt<>(new ChatRoom[]{actual}));
+
+        //ACT
+        begin();
+        actual = UserPersistenceService.get_instance().upsert(expectedMail);
+        calculatePerformance("upsert insert mail");
+
+        //ASSERT
+        assertMails(new Liszt<>(new Mail[]{expectedMail}), new Liszt<>(new Mail[]{actual.get_mails().getLast()}));
+
+        //ACT
+        expectedChatRoom.set_title(postTitle);
+        begin();
+        actual = UserPersistenceService.get_instance().upsert(expectedChatRoom);
+        calculatePerformance("upsert update chat room");
+
+        //ASSERT
+        assertChatRooms(new Liszt<>(new ChatRoom[]{expectedChatRoom}), new Liszt<>(new ChatRoom[]{actual}));
+
+        //ACT
+        expectedMail.set_content(postContent);
+        begin();
+        actual = UserPersistenceService.get_instance().upsert(expectedMail);
+        calculatePerformance("upsert update mail");
+
+        //ASSERT
+        assertMails(new Liszt<>(new Mail[]{expectedMail}), new Liszt<>(new Mail[]{actual.get_mails().getLast()}));
+    }
 
     @Test
     void canCRUDArtist() {
@@ -137,14 +354,5 @@ class UserCRUDTests extends JTest {
         boolean result = UserPersistenceService.get_instance().delete(user).get_truth();
         calculatePerformance("delete " + authority);
         return result;
-    }
-    private void asserting(User expected, User actual, User.Authority authority) {
-        switch (authority) {
-            case PARTICIPANT -> assertParticipants((Participant) expected, (Participant) actual);
-            case BAND -> assertBands((Band) expected,(Band) actual);
-            case ARTIST -> assertArtists((Artist) expected,(Artist) actual);
-            case VENUE -> assertVenues((Venue) expected,(Venue) actual);
-            default -> fail();
-        }
     }
 }
