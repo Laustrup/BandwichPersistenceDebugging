@@ -1,6 +1,8 @@
 package laustrup.bandwichpersistencedebugging;
 
-import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
+import laustrup.bandwichpersistencedebugging.models.chats.messages.Bulletin;
+import laustrup.bandwichpersistencedebugging.models.users.contact_infos.ContactInfo;
+import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -8,10 +10,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Adds a few functions to test methods to reuse.
  */
-public abstract class JTest {
+public abstract class JTest extends Asserter {
 
     /**
      * Will be the start of the ACT in tests
@@ -25,6 +30,11 @@ public abstract class JTest {
      * Are being reset for each method.
      */
     protected TestItems _items;
+
+    /**
+     * A default password, with the purpose of creating, logging in and various alike features.
+     */
+    protected final String _password = "123456789%&";
 
     /**
      * This Random is the java Random utility, that can be reused throughout tests.
@@ -76,13 +86,4 @@ public abstract class JTest {
 
         return performance;
     }
-
-    protected void compare(Participant expected, Participant actual) {
-    }
-
-    /*
-    private void compare(User expected, User actual) {
-        assertEquals(expected.,);
-    }
-     */
 }

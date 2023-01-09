@@ -53,6 +53,7 @@ public class Participation extends Model {
                     "primaryId:" + _primaryId +
                     ",secondaryId:" + _secondaryId +
                     ",title:" + _title +
+                    ",type:" + _type +
                     ",timestamp:" + _timestamp +
                 ")";
     }

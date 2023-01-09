@@ -44,11 +44,12 @@ public class Bulletin extends Message {
 
     @Override
     public String toString() {
-        return "Bulletin(id:" + _primaryId +
-                ",content:" + _content +
-                ",isSent:" + _sent +
-                ",isEdited:" + _edited.get_argument() +
-                ",isPublic:" + _public +
+        return "Bulletin(" +
+                    "id:" + _primaryId +
+                    ",content:" + _content +
+                    ",isSent:" + _sent +
+                    ",isEdited:" + _edited.get_argument() +
+                    ",isPublic:" + _public +
                 ")";
     }
 }

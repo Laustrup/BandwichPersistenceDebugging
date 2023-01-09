@@ -31,6 +31,8 @@ public class TimeService {
         return _instance;
     }
 
+    private TimeService() {}
+
     /**
      * Calculates the amount of minutes, that it has taken for the first message to be answered.
      * @param chatRooms The specific ChatRooms, that is wished to be calculated.
