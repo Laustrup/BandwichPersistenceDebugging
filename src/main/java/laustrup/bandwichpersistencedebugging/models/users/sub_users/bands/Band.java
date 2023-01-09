@@ -125,11 +125,12 @@ public class Band extends Performer {
 
     @Override
     public String toString() {
-        return "Band(id="+_primaryId+
-                ",username="+_username+
-                ",description="+_description+
-                ",timestamp="+_timestamp+
-                ",runner="+_runner+
+        return "Band(" +
+                    "id=" + _primaryId +
+                    ",username=" + _username +
+                    ",description=" + _description +
+                    ",timestamp=" + _timestamp +
+                    ",runner=" + _runner +
                 ")";
     }
 }

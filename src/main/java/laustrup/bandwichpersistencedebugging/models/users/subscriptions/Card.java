@@ -126,5 +126,4 @@ public class Card {
         AMERICAN_EXPRESS,
         DANCARD,
     }
-
 }

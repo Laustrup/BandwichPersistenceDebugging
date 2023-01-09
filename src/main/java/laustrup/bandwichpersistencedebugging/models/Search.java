@@ -5,11 +5,13 @@ import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Is used for response of a search request,
  * contains different objects that are alike of the search query.
  */
+@ToString
 public class Search {
 
     /**
@@ -27,25 +29,5 @@ public class Search {
     public Search(Liszt<User> users, Liszt<Event> events) {
         _users = users;
         _events = events;
-    }
-
-    @Override
-    public String toString() {
-        String search = "Search(Users(";
-
-        for (int i = 1; i <= _users.size(); i++) {
-            search += _users.get(i).toString();
-            if (i > _users.size())
-                search += ", ";
-        }
-        search += "),Events(";
-
-        for (int i = 1; i <= _events.size(); i++) {
-            search += _events.get(i).toString();
-            if (i > _events.size())
-                search += ", ";
-        }
-
-        return search + "))";
     }
 }

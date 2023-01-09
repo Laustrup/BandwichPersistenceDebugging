@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
  * Defines the kind of subscription a user is having.
  * Only Artists and Bands can have a paying subscription.
  */
-@ToString
 public class Subscription extends Model {
 
     /**
@@ -158,6 +157,16 @@ public class Subscription extends Model {
      * @return True if the moment now is after the date that the offer of this Subscription will expire, otherwise false.
      */
     public boolean isOfferExpired() { return LocalDateTime.now().isAfter(_offer.get_expires()); }
+
+    @Override
+    public String toString() {
+        return "Subscription(" +
+                    "id:" + _primaryId +
+                    ",status:" + _status +
+                    ",type:" + _type +
+                    ",price:" + _price +
+                ")";
+    }
 
     /**
      * An enum that can be of different types, determining the type of Subscription.

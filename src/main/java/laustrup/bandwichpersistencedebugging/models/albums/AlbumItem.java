@@ -83,4 +83,12 @@ public class AlbumItem extends Model {
      * An enum that will describe the type of Album.
      */
     public enum Kind { IMAGE,MUSIC; }
+
+    @Override
+    public String toString() {
+        return "AlbumItem(" +
+                    "id:" + _primaryId +
+                    ",endpoint:" + _endpoint +
+                ")";
+    }
 }

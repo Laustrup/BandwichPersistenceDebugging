@@ -154,11 +154,12 @@ public class Artist extends Performer {
 
     @Override
     public String toString() {
-        return "Artist(id="+_primaryId+
-                ",username="+_username+
-                ",description="+_description+
-                ",timestamp="+_timestamp+
-                ",runner="+_runner+
+        return "Artist(" +
+                    "id="+_primaryId+
+                    ",username="+_username+
+                    ",description="+_description+
+                    ",timestamp="+_timestamp+
+                    ",runner="+_runner+
                 ")";
     }
 }

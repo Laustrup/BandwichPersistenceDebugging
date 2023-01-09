@@ -7,14 +7,13 @@ import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 /**
  * Determines if a User have approved to be a part of the Event.
  */
-@ToString
+
 public class Request extends Model {
 
     /**
@@ -82,5 +81,15 @@ public class Request extends Model {
         if (_assembling)
             _event = event;
         return _event;
+    }
+
+    @Override
+    public String toString() {
+        return "AlbumItem(" +
+                    "primaryId:" + _primaryId +
+                    ",secondaryId:" + _secondaryId +
+                    ",approved:" + _approved.get_argument() +
+                    ",timestamp:" + _timestamp +
+                ")";
     }
 }

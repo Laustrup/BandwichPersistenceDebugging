@@ -391,7 +391,10 @@ public class Liszt<E> implements List<E>, ILiszt<E> {
 
     @Override
     public String toString() {
-        return "Liszt(size:"+size()+
-                ",map:"+(_map.getClass() == LinkedHashMap.class ? "Linked)" : "Unlinked)");
+        return "Liszt(" +
+                    "size:"+size()+
+                    ",isLinked:"+(_map.getClass() == LinkedHashMap.class ? "Linked" : "Unlinked") +
+                    ",map:" + _map.keySet() +
+                ")";
     }
 }

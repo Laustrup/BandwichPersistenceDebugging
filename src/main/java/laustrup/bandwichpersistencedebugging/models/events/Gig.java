@@ -88,9 +88,10 @@ public class Gig extends Model {
 
     @Override
     public String toString() {
-        return "Gig(id:" + _primaryId +
-                "start:" + _start.toString() +
-                "end:" + _end.toString() +
+        return "Gig(" +
+                    "id:" + _primaryId +
+                    ",start:" + _start.toString() +
+                    ",end:" + _end.toString() +
                 ")";
     }
 }

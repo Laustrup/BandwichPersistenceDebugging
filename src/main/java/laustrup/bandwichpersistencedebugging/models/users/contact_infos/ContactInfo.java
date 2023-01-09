@@ -3,14 +3,12 @@ package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 import laustrup.bandwichpersistencedebugging.models.Model;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 /**
  * Contains information that people need in order to contact the User.
  */
-@ToString
 public class ContactInfo extends Model {
 
     /**
@@ -59,13 +57,17 @@ public class ContactInfo extends Model {
      * @return The collected one liner String of the Address.
      */
     public String getAddressInfo() {
-        String info = new String();
+        return _address.toString();
+    }
 
-        info += _address.get_street() != null ? _address.get_street() + ", " : "";
-        info += _address.get_floor() != null ? _address.get_floor() + ", " : "";
-        info += _address.get_postal() != null ? _address.get_postal() + " " : "";
-        info += _address.get_city() != null ? _address.get_city() : "";
-
-        return info;
+    @Override
+    public String toString() {
+        return "ContactInfo(" +
+                    "id:" + _primaryId +
+                    ",email:" + _email +
+                    ",address:" + getAddressInfo() +
+                    ",phone:" + _phone.toString() +
+                    ",country:" + _country.toString() +
+                ")";
     }
 }

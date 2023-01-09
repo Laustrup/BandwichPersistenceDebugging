@@ -9,7 +9,6 @@ import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  * This is used for multiple Users to communicate with each other through Mails.
  */
-@NoArgsConstructor @ToString
+@NoArgsConstructor
 public class ChatRoom extends Model {
 
     /**
@@ -218,5 +217,14 @@ public class ChatRoom extends Model {
                 return mail;
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatRoom(" +
+                    "id:" + _primaryId +
+                    ",title:" + _title +
+                    ",timestamp:" + _timestamp +
+                ")";
     }
 }

@@ -3,14 +3,13 @@ package laustrup.bandwichpersistencedebugging.models.events;
 import laustrup.bandwichpersistencedebugging.models.Model;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
 import lombok.Data;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 /**
  * Determines type of which a Participant is participating in an Event.
  */
-@Data @ToString
+@Data
 public class Participation extends Model {
 
     /**
@@ -46,6 +45,16 @@ public class Participation extends Model {
         _participant = participant;
         _event = event;
         _type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Participation(" +
+                    "primaryId:" + _primaryId +
+                    ",secondaryId:" + _secondaryId +
+                    ",title:" + _title +
+                    ",timestamp:" + _timestamp +
+                ")";
     }
 
     /**

@@ -138,10 +138,11 @@ public class Participant extends User {
 
     @Override
     public String toString() {
-        return "Artist(id="+_primaryId+
-                ",username="+_username+
-                ",description="+_description+
-                ",timestamp="+_timestamp+
+        return "Artist(" +
+                    "id=" + _primaryId +
+                    ",username=" + _username +
+                    ",description=" + _description +
+                    ",timestamp=" + _timestamp +
                 ")";
     }
 }

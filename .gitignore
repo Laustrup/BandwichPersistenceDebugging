@@ -40,3 +40,7 @@ build/
 
 ### Spring properties ###
 /src/main/resources/application.properties
+
+### Build ###
+/src/main/resources/META-INF/
+/out/
