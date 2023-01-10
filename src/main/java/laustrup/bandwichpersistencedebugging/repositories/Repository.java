@@ -27,16 +27,12 @@ public abstract class Repository {
      * @return The ResultSet gathered from the PreparedStatement, if something unexpected happened, it returns null.
      */
     protected ResultSet read(String sql) {
-        if (handleConnection()) {
-            try {
-                PreparedStatement statement = connection().prepareStatement(sql);
-                return statement.executeQuery();
-            } catch (SQLException e) {
-                Printer.get_instance().print("Couldn't read sql statement...",e);
-            }
-            return null;
+        handleConnection();
+        try {
+            return connection().prepareStatement(sql).executeQuery();
+        } catch (SQLException e) {
+            Printer.get_instance().print("Couldn't read sql statement...\n\n" + sql,e);
         }
-        Printer.get_instance().print("Couldn't handle database connection...", new SQLException());
         return null;
     }
 
@@ -51,16 +47,14 @@ public abstract class Repository {
      * @return The boolean answer of the database success.
      */
     protected boolean edit(String sql, boolean doClose) {
-        if (handleConnection()) {
             try {
-                PreparedStatement statement = connection().prepareStatement(sql);
+                PreparedStatement statement = handleConnection().prepareStatement(sql);
                 boolean success = statement.executeUpdate() > 0;
 
                 if (doClose)
                     closeConnection();
                 return success;
             } catch (SQLException e) { Printer.get_instance().print("Couldn't execute update...",e); }
-        }
         return false;
     }
 
@@ -73,35 +67,35 @@ public abstract class Repository {
      * @return The PreparedStatement that is executed with the GENERATED KEY.
      */
     protected PreparedStatement create(String sql) {
-        if (handleConnection()) {
             try {
-                PreparedStatement statement = connection().prepareStatement(sql,
+                PreparedStatement statement = handleConnection().prepareStatement(sql,
                         PreparedStatement.RETURN_GENERATED_KEYS);
 
                 statement.executeUpdate();
                 return statement;
             } catch (SQLException e) { Printer.get_instance().print("Couldn't execute update...",e); }
-        }
         return null;
     }
 
     /**
      * If connection is closed, it will open it, otherwise not.
-     * @return True if it has opened it and false if not.
+     * @return The open connection.
      */
-    public boolean handleConnection() {
-        if (DbGate.get_instance().isClosed().get_truth()) {
-            this._connector.createConnection();
-            return true;
-        }
-        return false;
+    public Connection handleConnection() {
+        if (DbGate.get_instance().connectionIsNull())
+            return _connector.createConnection();
+        else if (DbGate.get_instance().isClosed().get_truth())
+            return _connector.createConnection();
+        else if (!DbGate.get_instance().isClosed().get_truth())
+            return DbGate.get_instance().get_connection();
+        return null;
     }
 
     /**
      * Will close the database connection of this instance.
      * @return The success of the closing as a Plato. Will be undefined, if there is a SQLException and null if the connection is null.
      */
-    public Plato closeConnection() { return this._connector.closeConnection(); }
+    public Plato closeConnection() { return _connector.closeConnection(); }
 
     /**
      * Will determine if the Connection of this Repository is closed.
@@ -214,10 +208,11 @@ public abstract class Repository {
 
         /**
          * Opens the connection with the DriverManager and the Crate information.
-         * @throws SQLException Will be thrown if there is a problem with the connection.
          */
         private void openConnection() {
-            if (DbGate.get_instance().isClosed().get_truth())
+            if (DbGate.get_instance().connectionIsNull())
+                DbGate.get_instance().open();
+            else if (DbGate.get_instance().isClosed().get_truth())
                 DbGate.get_instance().open();
         }
 

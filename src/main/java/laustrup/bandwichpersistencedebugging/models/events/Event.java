@@ -165,16 +165,18 @@ public class Event extends Model {
         _description = description;
         _gigs = gigs;
 
-        try {
-            calculateTime();
-        } catch (InputMismatchException e) {
-            Printer.get_instance().print("End date is before beginning date of " + _title + "...", e);
-        }
+        if (_start != null && _end != null)
+            try {
+                calculateTime();
+            } catch (InputMismatchException e) {
+                Printer.get_instance().print("End date is before beginning date of " + _title + "...", e);
+            }
 
-        if (Duration.between(openDoors, _start).toMinutes() >= 0)
-            _openDoors = openDoors;
-        else
-            throw new InputMismatchException();
+        if (_start != null && _end != null)
+            if (Duration.between(openDoors, _start).toMinutes() >= 0)
+                _openDoors = openDoors;
+            else
+                throw new InputMismatchException();
 
         _voluntary = isVoluntary;
         _public = isPublic;
@@ -185,7 +187,9 @@ public class Event extends Model {
         _contactInfo = contactInfo;
         _venue = venue;
 
-        _location = location == null || location.isEmpty() ? venue.get_location() : location;
+        _location = location == null || location.isEmpty() ?
+                (venue != null ? (venue.get_location() != null ? venue.get_location() : null)
+                    : null) : location;
 
         _requests = requests;
         _participations = participations;
@@ -596,20 +600,21 @@ public class Event extends Model {
      * @throws InputMismatchException In case that the end is before the beginning.
      */
     private long calculateTime() throws InputMismatchException {
-        _start = _gigs.get(1).get_start();
-        _end = _gigs.get(1).get_end();
+        _start = _gigs.isEmpty() ? null : _gigs.get(1).get_start();
+        _end = _gigs.isEmpty() ? null : _gigs.get(1).get_end();
 
-        if (_end.isAfter(_start)) {
+        if (_start != null && _end != null)
+            if (_end.isAfter(_start)) {
 
-            if (_gigs.size() > 1)
-                for (Gig gig : _gigs) {
-                    if (gig.get_start().isBefore(_start)) _start = gig.get_start();
-                    if (gig.get_end().isAfter(_end)) _end = gig.get_end();
-                }
+                if (_gigs.size() > 1)
+                    for (Gig gig : _gigs) {
+                        if (gig.get_start().isBefore(_start)) _start = gig.get_start();
+                        if (gig.get_end().isAfter(_end)) _end = gig.get_end();
+                    }
 
-            _length = Duration.between(_start, _end).toMillis();
-            return _length;
-        }
+                _length = Duration.between(_start, _end).toMillis();
+                return _length;
+            }
 
         _start = null;
         _end = null;

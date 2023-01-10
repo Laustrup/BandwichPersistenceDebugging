@@ -8,3 +8,6 @@ The original project can be found at [BandwichPersistence](https://github.com/La
 
 * The controller has got a endpoint dictory field.
 * Dependencies has changed to Spring Boot starter dependencies to make it able to compile.
+* LEFT JOIN SELECTS for if users doesn't have anything in table.
+* Extra test methods added.
+* Fixed a stackoverflow error of continuing reads of relation fields.

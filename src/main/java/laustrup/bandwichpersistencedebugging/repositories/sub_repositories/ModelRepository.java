@@ -47,6 +47,9 @@ public class ModelRepository extends Repository {
      * @return The collected JDBC ResultSet.
      */
     public ResultSet chatRooms(Liszt<Long> ids) {
+        if (ids.isEmpty())
+            return null;
+
         StringBuilder where = new StringBuilder("WHERE ");
 
         for (int i = 1; i <= ids.size(); i++) {
@@ -57,7 +60,7 @@ public class ModelRepository extends Repository {
 
         return read("SELECT * FROM chat_rooms " +
                 "INNER JOIN chatters ON chat_rooms.id = chatters.chat_room_id " +
-                "INNER JOIN mails ON chat_rooms.id = mails.chat_room id " +
+                "LEFT JOIN mails ON chat_rooms.id = mails.chat_room id " +
                 where + ";");
     }
 
@@ -66,7 +69,7 @@ public class ModelRepository extends Repository {
      * @param ids The ids of the Bulletins.
      * @return The collected JDBC ResultSet.
      */
-    public ResultSet bulletins(Liszt<Long> ids) {
+    public ResultSet bulletins(Liszt<Long> ids, boolean isUser) {
         StringBuilder where = new StringBuilder("WHERE ");
 
         for (int i = 1; i <= ids.size(); i++) {
@@ -75,14 +78,13 @@ public class ModelRepository extends Repository {
                 where.append(" OR ");
         }
 
-        return read("SELECT * FROM user_ " +
-                "INNER JOIN chatters ON chat_rooms.id = chatters.chat_room_id " +
-                "INNER JOIN mails ON chat_rooms.id = mails.chat_room id " +
+        String table = (isUser ? "user_bulletins " : "event_bulletins ");
+        return read("SELECT * FROM " + table +
+                "INNER JOIN users ON " + table +".author_id = users.id OR " + table + ".receiver_id = users.id " +
                 where + ";");
     }
 
     //TODO Make bulletin tables the same.
-
     /**
      * Upserts Bulletin depending on the id.
      * This means it will insert the values of the Bulletin if they don't exist,

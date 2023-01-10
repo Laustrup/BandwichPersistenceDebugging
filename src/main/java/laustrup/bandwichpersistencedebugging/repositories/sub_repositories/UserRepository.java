@@ -79,6 +79,9 @@ public class UserRepository extends Repository {
      * @return The collected JDBC ResultSet.
      */
     public ResultSet get(Liszt<Long> ids) {
+        if (ids.isEmpty())
+            return null;
+
         StringBuilder where = new StringBuilder("WHERE ");
 
         for (int i = 1; i <= ids.size(); i++) {
@@ -114,22 +117,21 @@ public class UserRepository extends Repository {
      */
     private ResultSet get(String where) {
         return read("SELECT * FROM users " +
-                "INNER JOIN band_members ON band_members.artist_id = users.id OR band_members.band_id = users.id " +
-                "INNER JOIN gear ON gear.user_id = users.id " +
-                "INNER JOIN venues ON venues.user_id = users.id " +
-                "INNER JOIN `events` ON `events`.venue_id = users.id " +
-                "INNER JOIN gigs ON gigs.event_id = `events`.id " +
-                "INNER JOIN acts ON acts.gig_id = gigs.id OR acts.user_id = users.id " +
-                "INNER JOIN participations ON participations.event_id = `events`.id" +
-                "INNER JOIN followings ON followings.fan_id = users.id OR followings.idol_id = users.id " +
-                "INNER JOIN chatters ON chatters.user_id = users.id " +
-                "INNER JOIN chat_rooms ON chatters.chat_room_id = chat_rooms.id " +
-                "INNER JOIN user_bulletins ON users.id = bulletins.receiver_id " +
-                "INNER JOIN requests ON users.id = requests.user_id " +
-                "INNER JOIN ratings ON users.id = ratings.appointed_id " +
-                "INNER JOIN album_relations ON users.id = album_relations.user_id " +
-                "INNER JOIN albums ON user_albums.album_id = albums.id " +
-                "INNER JOIN album_endpoints ON albums.id = album_endpoints.album_id " +
+                "LEFT JOIN band_members ON band_members.artist_id = users.id OR band_members.band_id = users.id " +
+                "LEFT JOIN gear ON gear.user_id = users.id " +
+                "LEFT JOIN venues ON venues.user_id = users.id " +
+                "LEFT JOIN `events` ON `events`.venue_id = users.id " +
+                "LEFT JOIN gigs ON gigs.event_id = `events`.id " +
+                "LEFT JOIN acts ON acts.gig_id = gigs.id OR acts.user_id = users.id " +
+                "LEFT JOIN participations ON participations.event_id = `events`.id " +
+                "LEFT JOIN followings ON followings.fan_id = users.id OR followings.idol_id = users.id " +
+                "LEFT JOIN chatters ON chatters.user_id = users.id " +
+                "LEFT JOIN chat_rooms ON chatters.chat_room_id = chat_rooms.id " +
+                "LEFT JOIN user_bulletins ON users.id = user_bulletins.receiver_id " +
+                "LEFT JOIN requests ON users.id = requests.user_id " +
+                "LEFT JOIN ratings ON users.id = ratings.appointed_id " +
+                "LEFT JOIN albums ON users.id = albums.author_id " +
+                "LEFT JOIN album_items ON albums.id = album_items.album_id " +
                 "INNER JOIN subscriptions ON users.id = subscriptions.user_id " +
                 "INNER JOIN contact_informations ON users.id = contact_informations.user_id " +
                 where + ";");

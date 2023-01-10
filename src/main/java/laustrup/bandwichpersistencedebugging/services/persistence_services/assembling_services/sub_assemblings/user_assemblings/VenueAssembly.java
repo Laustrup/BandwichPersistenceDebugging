@@ -59,8 +59,8 @@ public class VenueAssembly extends UserAssembler {
     public Venue assemble(ResultSet set) throws SQLException {
         setupUserAttributes(set);
         String location = set.getString("venues.location");
-        String gear = set.getString("gear.`description`");
-        int size = set.getInt("venues.`size`");
+        String gear = set.getString("gear.description");
+        int size = set.getInt("venues.size");
         Liszt<Request> requests = new Liszt<>();
 
         do {

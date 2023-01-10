@@ -67,8 +67,7 @@ public class Participant extends User {
         super(id, username, firstName, lastName, description, contactInfo, albums, ratings, events, chatRooms,
                 subscription, bulletins, Authority.PARTICIPANT, timestamp);
         _idols = idols;
-        _subscription.get_user().set_username(_username);
-        _subscription.get_user().set_description(_description);
+        _subscription.set_user(this);
     }
 
     public Participant(long id, String username, String description, ContactInfo contactInfo, Liszt<Album> albums,
@@ -77,8 +76,7 @@ public class Participant extends User {
         super(id, username, description, contactInfo, albums, ratings, events, chatRooms,
                 subscription, bulletins, Authority.PARTICIPANT, timestamp);
         _idols = idols;
-        _subscription.get_user().set_username(_username);
-        _subscription.get_user().set_description(_description);
+        _subscription.set_user(this);
     }
 
     public Participant(String username, String firstName, String lastName, String description,
@@ -88,8 +86,6 @@ public class Participant extends User {
                         Subscription.Status.ACCEPTED, subscriptionOffer, null),
                 Authority.PARTICIPANT);
         _idols = idols;
-        _subscription.get_user().set_username(_username);
-        _subscription.get_user().set_description(_description);
         setSubscriptionUser();
     }
 

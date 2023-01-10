@@ -336,6 +336,8 @@ public class Liszt<E> implements List<E>, ILiszt<E> {
 
     @Override
     public E get(int index) {
+        if (index <= 0)
+            return null;
         return _data[index-1];
     }
     public E get(String key) {
@@ -387,7 +389,7 @@ public class Liszt<E> implements List<E>, ILiszt<E> {
         return null;
     }
 
-    public E getLast() { return _data[size()-1]; }
+    public E getLast() { return _data.length > 0 ? _data[size()-1] : null; }
 
     @Override
     public String toString() {

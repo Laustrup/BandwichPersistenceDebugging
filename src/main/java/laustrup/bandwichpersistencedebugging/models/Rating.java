@@ -67,9 +67,8 @@ public class Rating extends Model {
      * @throws InputMismatchException Will be thrown if the value is not between 0 and 5.
      */
     public int set_value(int value) throws InputMismatchException {
-        if (0 < value && value <= 5 ) {
+        if (0 < value && value <= 5 )
             _value = value;
-        }
         else
             throw new InputMismatchException();
 

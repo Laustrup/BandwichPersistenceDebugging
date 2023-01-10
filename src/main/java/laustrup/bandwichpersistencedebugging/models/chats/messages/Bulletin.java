@@ -48,7 +48,7 @@ public class Bulletin extends Message {
                     "id:" + _primaryId +
                     ",content:" + _content +
                     ",isSent:" + _sent +
-                    ",isEdited:" + _edited.get_argument() +
+                    (_edited == null ? "" : ",isEdited:" + _edited.get_argument()) +
                     ",isPublic:" + _public +
                 ")";
     }

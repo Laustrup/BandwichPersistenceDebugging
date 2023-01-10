@@ -18,6 +18,7 @@ import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.venues.Venue;
 import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Subscription;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
+import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +31,7 @@ public class Asserter {
      * @param authority The authority of both Users.
      */
     protected void asserting(User expected, User actual, User.Authority authority) {
+        Printer.get_instance().print("Expected = " + expected + "\n\nActual = " + actual);
         switch (authority) {
             case PARTICIPANT -> assertParticipants((Participant) expected, (Participant) actual);
             case BAND -> assertBands((Band) expected,(Band) actual);

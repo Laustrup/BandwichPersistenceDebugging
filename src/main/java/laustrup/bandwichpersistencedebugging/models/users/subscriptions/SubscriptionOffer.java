@@ -1,5 +1,6 @@
 package laustrup.bandwichpersistencedebugging.models.users.subscriptions;
 
+import laustrup.bandwichpersistencedebugging.utilities.Printer;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -30,10 +31,14 @@ public class SubscriptionOffer {
      */
     private double _effect;
 
-    public SubscriptionOffer(LocalDateTime expires, Type type, double effect) throws InputMismatchException {
+    public SubscriptionOffer(LocalDateTime expires, Type type, double effect) {
         _expires = expires;
         _type = type;
-        set_effect(effect);
+        try {
+            set_effect(effect);
+        } catch (InputMismatchException e) {
+            Printer.get_instance().print("Couldn't create effect to subscription offer...", e);
+        }
     }
 
     /**
@@ -54,7 +59,7 @@ public class SubscriptionOffer {
      * @throws InputMismatchException Will be thrown, if the effect value is not between 0 -> 1.
      */
     public double set_effect(double effect) throws InputMismatchException {
-        if (effect > 0 && effect <= 1)
+        if (effect >= 0 && effect <= 1)
             _effect = effect;
         else
             throw new InputMismatchException();

@@ -101,7 +101,7 @@ public class Subscription extends Model {
      * @return The User of this Subscription.
      */
     public User set_user(User user) {
-        if (user == null) {
+        if (_user == null) {
             _user = user;
             defineType(_type);
         }

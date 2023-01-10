@@ -6,23 +6,21 @@ import laustrup.bandwichpersistencedebugging.models.albums.Album;
 import laustrup.bandwichpersistencedebugging.models.chats.ChatRoom;
 import laustrup.bandwichpersistencedebugging.models.chats.messages.Bulletin;
 import laustrup.bandwichpersistencedebugging.models.chats.messages.Mail;
-import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.users.Login;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Artist;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.venues.Venue;
-import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Card;
 import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Subscription;
-import laustrup.bandwichpersistencedebugging.models.users.subscriptions.SubscriptionOffer;
 import laustrup.bandwichpersistencedebugging.services.RandomCreatorService;
-import laustrup.bandwichpersistencedebugging.services.TimeService;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.assembling_services.Assembly;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.entity_services.sub_entity_services.*;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDateTime;
 
@@ -230,6 +228,18 @@ class UserCRUDTests extends JTest {
 
         //ASSERT
         assertMails(new Liszt<>(new Mail[]{expectedMail}), new Liszt<>(new Mail[]{actual.get_mails().getLast()}));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"1","5","6","8"})
+    void canAssembleUser(long id) {
+        //ACT
+        begin();
+        User actual = Assembly.get_instance().getUser(id);
+        calculatePerformance();
+
+        //ASSERT
+        asserting(actual,actual,actual.get_authority());
     }
 
     @Test

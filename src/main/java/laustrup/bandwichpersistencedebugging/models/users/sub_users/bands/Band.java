@@ -45,15 +45,12 @@ public class Band extends Performer {
     public Band(long id, String username, String description, ContactInfo contactInfo, Liszt<Album> albums,
                 Liszt<Rating> ratings, Liszt<Event> events, Liszt<Gig> gigs, Liszt<ChatRoom> chatRooms,
                 Subscription subscription, Liszt<Bulletin> bulletins, Liszt<Artist> members,
-                String runner, Liszt<User> fans, Liszt<User> idols, LocalDateTime timestamp)
-            throws InputMismatchException {
+                String runner, Liszt<User> fans, Liszt<User> idols, LocalDateTime timestamp) {
         super(id, username, description, contactInfo, Authority.BAND, albums, ratings, events, gigs, chatRooms,
                 subscription, bulletins, fans, idols, timestamp);
         _username = username;
 
         _members = members;
-        if (_members.isEmpty())
-            throw new InputMismatchException();
 
         _runner = runner;
         _assembling = true;

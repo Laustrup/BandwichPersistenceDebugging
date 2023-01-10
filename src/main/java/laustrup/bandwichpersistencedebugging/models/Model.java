@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.InputMismatchException;
 
 /**
  * The base of many objects, that share these same attributes.
@@ -58,7 +59,9 @@ public abstract class Model {
     public Model() {
         _timestamp = LocalDateTime.now();
     }
-    public Model(long id) {
+    public Model(long id) throws InputMismatchException {
+        if (id == 0)
+            throw new InputMismatchException();
         _primaryId = id;
         _timestamp = LocalDateTime.now();
     }
@@ -68,19 +71,25 @@ public abstract class Model {
         _timestamp = LocalDateTime.now();
     }
 
-    public Model(long id, String title, LocalDateTime timestamp) {
+    public Model(long id, String title, LocalDateTime timestamp) throws InputMismatchException {
+        if (id == 0)
+            throw new InputMismatchException();
         _primaryId = id;
         _title = title;
         _timestamp = timestamp;
     }
-    public Model(long primaryId, long secondaryId, String title) {
+    public Model(long primaryId, long secondaryId, String title) throws InputMismatchException {
+        if (primaryId == 0)
+            throw new InputMismatchException();
         _primaryId = primaryId;
         _secondaryId = secondaryId;
         _title = title;
         _timestamp = LocalDateTime.now();
     }
 
-    public Model(long primaryId, long secondaryId, String title, LocalDateTime timestamp) {
+    public Model(long primaryId, long secondaryId, String title, LocalDateTime timestamp) throws InputMismatchException {
+        if (primaryId == 0)
+            throw new InputMismatchException();
         _primaryId = primaryId;
         _secondaryId = secondaryId;
         _title = title;

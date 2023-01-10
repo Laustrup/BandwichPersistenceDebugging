@@ -40,13 +40,15 @@ public class ArtistAssembly extends UserAssembler {
      * @return Artists made from the values of the ResultSet.
      * @throws SQLException Will be triggered from the ResultSet, if there is an error.
      */
-    public Liszt<Artist> assembles(ResultSet set) throws SQLException {
+    public Liszt<Artist> assembles(ResultSet set, boolean isTemplate) throws SQLException {
         Liszt<Artist> artists = new Liszt<>();
 
-        while (!set.isAfterLast()) {
-            if (set.isBeforeFirst())
-                set.next();
-            artists.add(assemble(set));
+        if (set != null) {
+            while (!set.isAfterLast()) {
+                if (set.isBeforeFirst())
+                    set.next();
+                artists.add(assemble(set,isTemplate));
+            }
         }
 
         return artists;
@@ -59,10 +61,10 @@ public class ArtistAssembly extends UserAssembler {
      * @return An Artist object made from the values of the ResultSet.
      * @throws SQLException Will be triggered from the ResultSet, if there is an error.
      */
-    public Artist assemble(ResultSet set) throws SQLException {
+    public Artist assemble(ResultSet set, boolean isTemplate) throws SQLException {
         setupUserAttributes(set);
         Liszt<Gig> gigs = new Liszt<>();
-        String runner = set.getString("gear.`description`");
+        String runner = set.getString("gear.description");
         Liszt<User> fans = new Liszt<>();
         Liszt<User> idols = new Liszt<>();
         Liszt<Request> requests = new Liszt<>();
@@ -92,7 +94,7 @@ public class ArtistAssembly extends UserAssembler {
 
         Artist artist = new Artist(_id, _username, _firstName, _lastName, _description, _contactInfo, _albums, _ratings, _events, gigs,
                 _chatRooms, _subscription, _bulletins,
-                BandAssembly.get_instance().assembles(UserRepository.get_instance().get(bandIds)),
+                isTemplate ? BandAssembly.get_instance().assembles(UserRepository.get_instance().get(bandIds), true) : new Liszt<>(),
                 runner, fans, idols, requests, _timestamp);
 
         resetUserAttributes();

@@ -48,7 +48,7 @@ public class AssemblyDescriber {
             try {
                 if (set.isBeforeFirst())
                     set.next();
-                users.add(UserAssembly.get_instance().assemble(set, false));
+                users.add(UserAssembly.get_instance().assemble(set, false, true));
             } catch (SQLException e) {
                 Printer.get_instance().print("Couldn't describe Users...", e);
             }
@@ -72,13 +72,15 @@ public class AssemblyDescriber {
         chatRooms = new Liszt<>();
         ResultSet set = ModelRepository.get_instance().chatRooms(_ids);
 
-        for (long id : _ids) {
-            try {
-                if (set.isBeforeFirst())
-                    set.next();
-                chatRooms.add(UserAssembly.get_instance().assembleChatRoom(set));
-            } catch (SQLException e) {
-                Printer.get_instance().print("Couldn't describe Users...", e);
+        if (set != null) {
+            for (long id : _ids) {
+                try {
+                    if (set.isBeforeFirst())
+                        set.next();
+                    chatRooms.add(UserAssembly.get_instance().assembleChatRoom(set));
+                } catch (SQLException e) {
+                    Printer.get_instance().print("Couldn't describe Users...", e);
+                }
             }
         }
 
@@ -99,13 +101,15 @@ public class AssemblyDescriber {
         events = new Liszt<>();
         ResultSet set = EventRepository.get_instance().get(_ids);
 
-        for (long id : _ids) {
-            try {
-                if (set.isBeforeFirst())
-                    set.next();
-                events.add(EventAssembly.get_instance().assemble(set, false));
-            } catch (SQLException e) {
-                Printer.get_instance().print("Couldn't describe Events...", e);
+        if (set != null) {
+            for (long id : _ids) {
+                try {
+                    if (set.isBeforeFirst())
+                        set.next();
+                    events.add(EventAssembly.get_instance().assemble(set, false));
+                } catch (SQLException e) {
+                    Printer.get_instance().print("Couldn't describe Events...", e);
+                }
             }
         }
 
@@ -121,7 +125,8 @@ public class AssemblyDescriber {
         int bulletinAmount = bulletins.size();
         _ids = new Liszt<>();
         for (Bulletin bulletin : bulletins)
-            _ids.add(bulletin.get_author().get_primaryId());
+            if (bulletin.get_author() != null)
+                _ids.add(bulletin.get_author().get_primaryId());
 
         ResultSet set = UserRepository.get_instance().get(_ids);
 
@@ -129,7 +134,7 @@ public class AssemblyDescriber {
             try {
                 if (set.isBeforeFirst())
                     set.next();
-                bulletins.get(i).set_author(UserAssembly.get_instance().assemble(set, false));
+                bulletins.get(i).set_author(UserAssembly.get_instance().assemble(set, false,true));
             } catch (SQLException e) {
                 Printer.get_instance().print("Couldn't describe Bulletins...", e);
             }
@@ -152,16 +157,18 @@ public class AssemblyDescriber {
 
         ResultSet set = !forUser ? UserRepository.get_instance().get(_ids) : EventRepository.get_instance().get(_ids);
 
-        for (int i = 1; i <= _ids.size(); i++) {
-            try {
-                if (set.isBeforeFirst())
-                    set.next();
-                if (!forUser)
-                    requests.get(i).set_event(EventAssembly.get_instance().assemble(set, false));
-                else
-                    requests.get(i).set_user(UserAssembly.get_instance().assemble(set, false));
-            } catch (SQLException e) {
-                Printer.get_instance().print("Couldn't describe Requests...", e);
+        if (set != null) {
+            for (int i = 1; i <= _ids.size(); i++) {
+                try {
+                    if (set.isBeforeFirst())
+                        set.next();
+                    if (!forUser)
+                        requests.get(i).set_event(EventAssembly.get_instance().assemble(set, false));
+                    else
+                        requests.get(i).set_user(UserAssembly.get_instance().assemble(set, false, true));
+                } catch (SQLException e) {
+                    Printer.get_instance().print("Couldn't describe Requests...", e);
+                }
             }
         }
 
@@ -194,7 +201,7 @@ public class AssemblyDescriber {
 
         Liszt<User> users = new Liszt<>();
         for (long id : ids)
-            users.add(UserAssembly.get_instance().assemble(id));
+            users.add(UserAssembly.get_instance().assemble(id, true));
 
         Liszt<Performer[]> acts = new Liszt<>();
 

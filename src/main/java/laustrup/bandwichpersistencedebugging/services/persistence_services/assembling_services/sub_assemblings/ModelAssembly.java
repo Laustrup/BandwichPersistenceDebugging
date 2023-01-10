@@ -54,13 +54,19 @@ public class ModelAssembly {
 
     public Subscription assembleSubscription(ResultSet set) throws SQLException {
         String table = "subscriptions";
-        return new Subscription(set.getLong(table+".id"), Subscription.Type.valueOf(set.getString(table+".subscription_type")),
+
+        Subscription subscription = new Subscription(set.getLong(table+".user_id"),
+                Subscription.Type.valueOf(set.getString(table+".subscription_type")),
                 Subscription.Status.valueOf(set.getString(table+".status")),
-                new SubscriptionOffer(set.getTimestamp(table+".offer_expires").toLocalDateTime(),
+                new SubscriptionOffer(
+                        set.getTimestamp(table+".offer_expires") == null ? null :
+                                set.getTimestamp(table+".offer_expires").toLocalDateTime(),
                         SubscriptionOffer.Type.valueOf(set.getString(table+".offer_type")),
                         set.getDouble(table+".offer_effect")
-                        ),
+                ),
                 set.getLong(table+".card_id")
         );
+
+        return subscription;
     }
 }

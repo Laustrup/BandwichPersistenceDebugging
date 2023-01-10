@@ -76,7 +76,7 @@ public class Assembly extends Assembler {
      * @return The assembled User.
      */
     public User getUser(long id) {
-        return userAssembling(UserAssembly.get_instance().assemble(id), true);
+        return userAssembling(UserAssembly.get_instance().assemble(id,false), true);
     }
 
     /**
@@ -86,7 +86,7 @@ public class Assembly extends Assembler {
      * @param id The id of the User that is wished to be gathered.
      * @return The unassembled User.
      */
-    public User getUserUnassembled(long id) { return userAssembling(UserAssembly.get_instance().assemble(id), false); }
+    public User getUserUnassembled(long id) { return userAssembling(UserAssembly.get_instance().assemble(id,false), false); }
 
     /**
      * Gets a User object with the informations given from the UserRepository.
@@ -135,54 +135,57 @@ public class Assembly extends Assembler {
      * @return The assembled User.
      */
     private User userAssembling(User user, boolean willFinish) {
-        if (user.getClass() == Artist.class ||
-                user.getClass() == Band.class) {
-            ((Performer) user).set_idols(_describer.describeUsers(((Performer) user).get_idols()));
-            ((Performer) user).set_fans(_describer.describeUsers(((Performer) user).get_fans()));
-            ((Performer) user).set_gigs(_describer.describeGigs(((Performer) user).get_gigs()));
-        }
-        else if (user.getClass() == Participant.class)
-            ((Participant) user).set_idols(_describer.describeUsers(((Participant) user).get_idols()));
-
-        user.set_chatRooms(_describer.describeChatRooms(user.get_chatRooms()));
-        user.set_events(_describer.describeEvents(user.get_events()));
-
-        Liszt<Bulletin> bulletins = _describer.describeBulletinAuthors(user.get_bulletins());
-        for (int i = 1; i <= user.get_bulletins().size(); i++)
-            user.get_bulletins().set(i, bulletins.get(i));
-        user.set_bulletinReceivers();
-
-        if (user.getClass() == Artist.class ||
-            user.getClass() == Venue.class) {
-            Liszt<Request> requests = user.getClass() == Artist.class ?
-                    _describer.describeRequests(((Artist) user).get_requests(), true) :
-                    _describer.describeRequests(((Venue) user).get_requests(), true);
-            for (int i = 1; i <= requests.size(); i++) {
-                if (user.getClass() == Artist.class)
-                    ((Artist) user).get_requests().set(i, requests.get(i));
-                else
-                    ((Venue) user).get_requests().set(i, requests.get(i));
+        if (user != null) {
+            if (user.getClass() == Artist.class ||
+                    user.getClass() == Band.class) {
+                ((Performer) user).set_idols(_describer.describeUsers(((Performer) user).get_idols()));
+                ((Performer) user).set_fans(_describer.describeUsers(((Performer) user).get_fans()));
+                ((Performer) user).set_gigs(_describer.describeGigs(((Performer) user).get_gigs()));
             }
-            if (user.getClass() == Artist.class) {
-                ((Artist) user).set_requestUsers();
-                for (int i = 1; i <= requests.size(); i++)
-                    ((Artist) user).get_requests().get(i).doneAssembling();
-            } else {
-                ((Venue) user).set_requestUsers();
-                for (int i = 1; i <= requests.size(); i++)
-                    ((Venue) user).get_requests().get(i).doneAssembling();
+            else if (user.getClass() == Participant.class)
+                ((Participant) user).set_idols(_describer.describeUsers(((Participant) user).get_idols()));
+
+            user.set_chatRooms(_describer.describeChatRooms(user.get_chatRooms()));
+            user.set_events(_describer.describeEvents(user.get_events()));
+
+            Liszt<Bulletin> bulletins = _describer.describeBulletinAuthors(user.get_bulletins());
+            for (int i = 1; i <= user.get_bulletins().size(); i++)
+                user.get_bulletins().set(i, bulletins.get(i));
+            user.set_bulletinReceivers();
+
+            if (user.getClass() == Artist.class ||
+                user.getClass() == Venue.class) {
+                Liszt<Request> requests = user.getClass() == Artist.class ?
+                        _describer.describeRequests(((Artist) user).get_requests(), true) :
+                        _describer.describeRequests(((Venue) user).get_requests(), true);
+                for (int i = 1; i <= requests.size(); i++) {
+                    if (user.getClass() == Artist.class)
+                        ((Artist) user).get_requests().set(i, requests.get(i));
+                    else
+                        ((Venue) user).get_requests().set(i, requests.get(i));
+                }
+                if (user.getClass() == Artist.class) {
+                    ((Artist) user).set_requestUsers();
+                    for (int i = 1; i <= requests.size(); i++)
+                        ((Artist) user).get_requests().get(i).doneAssembling();
+                } else {
+                    ((Venue) user).set_requestUsers();
+                    for (int i = 1; i <= requests.size(); i++)
+                        ((Venue) user).get_requests().get(i).doneAssembling();
+                }
             }
+
+            user.setSubscriptionUser();
+            user.setAlbumsAuthor();
+            if (user.getClass() == Artist.class || user.getClass() == Band.class)
+                ((Performer) user).setAuthorOfAlbums();
+
+            if (willFinish)
+                return finish(user);
+            else
+                return user;
         }
-
-        user.setSubscriptionUser();
-        user.setAlbumsAuthor();
-        if (user.getClass() == Artist.class || user.getClass() == Band.class)
-            ((Performer) user).setAuthorOfAlbums();
-
-        if (willFinish)
-            return finish(user);
-        else
-            return user;
+        return null;
     }
 
     /**

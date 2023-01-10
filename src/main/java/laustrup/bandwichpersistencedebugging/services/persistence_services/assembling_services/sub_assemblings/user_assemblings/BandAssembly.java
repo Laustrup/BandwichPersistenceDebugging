@@ -5,9 +5,11 @@ import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
 import laustrup.bandwichpersistencedebugging.repositories.sub_repositories.UserRepository;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
+import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 
 /**
  * Is only used for database read functions.
@@ -39,13 +41,15 @@ public class BandAssembly extends UserAssembler {
      * @return Bands made from the values of the ResultSet.
      * @throws SQLException Will be triggered from the ResultSet, if there is an error.
      */
-    public Liszt<Band> assembles(ResultSet set) throws SQLException {
+    public Liszt<Band> assembles(ResultSet set, boolean isTemplate) throws SQLException {
         Liszt<Band> bands = new Liszt<>();
 
-        while (!set.isAfterLast()) {
-            if (set.isBeforeFirst())
-                set.next();
-            bands.add(assemble(set));
+        if (set != null) {
+            while (!set.isAfterLast()) {
+                if (set.isBeforeFirst())
+                    set.next();
+                bands.add(assemble(set, isTemplate));
+            }
         }
 
         return bands;
@@ -58,11 +62,11 @@ public class BandAssembly extends UserAssembler {
      * @return A Band object made from the values of the ResultSet.
      * @throws SQLException Will be triggered from the ResultSet, if there is an error.
      */
-    public Band assemble(ResultSet set) throws SQLException {
+    public Band assemble(ResultSet set, boolean isTemplate) throws SQLException {
         setupUserAttributes(set);
         Liszt<Gig> gigs = new Liszt<>();
         Liszt<Long> memberIds = new Liszt<>();
-        String runner = set.getString("gear.`description`");
+        String runner = set.getString("gear.description");
         Liszt<User> fans = new Liszt<>();
         Liszt<User> idols = new Liszt<>();
 
@@ -87,12 +91,18 @@ public class BandAssembly extends UserAssembler {
 
         } while (set.next());
 
-        Band band = new Band(_id, _username, _description, _contactInfo, _albums, _ratings, _events, gigs, _chatRooms,
-                _subscription, _bulletins,
-                ArtistAssembly.get_instance().assembles(UserRepository.get_instance().get(memberIds)),
-                runner, fans, idols, _timestamp);
+        try {
+            Band band = new Band(_id, _username, _description, _contactInfo, _albums, _ratings, _events, gigs, _chatRooms,
+                    _subscription, _bulletins,
+                    isTemplate ? ArtistAssembly.get_instance().assembles(UserRepository.get_instance().get(memberIds),true) : new Liszt<>(),
+                    runner, fans, idols, _timestamp);
 
-        resetUserAttributes();
-        return band;
+            resetUserAttributes();
+            return band;
+        } catch (InputMismatchException e) {
+            Printer.get_instance().print("Couldn't assemble band...",e);
+        }
+
+        return null;
     }
 }
