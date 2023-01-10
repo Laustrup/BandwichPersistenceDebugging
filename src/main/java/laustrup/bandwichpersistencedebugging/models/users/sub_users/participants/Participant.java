@@ -36,24 +36,23 @@ public class Participant extends User {
     public Participant(long id, String username, String firstName, String lastName, String description,
                        ContactInfo contactInfo, Liszt<Album> albums, Liszt<Rating> ratings, Liszt<Event> events,
                        Liszt<ChatRoom> chatRooms, Subscription.Status subscriptionStatus,
-                       SubscriptionOffer subscriptionOffer, Liszt<Bulletin> bulletins, Liszt<User> idols,
+                       SubscriptionOffer subscriptionOffer, Long cardId, Liszt<Bulletin> bulletins, Liszt<User> idols,
                        LocalDateTime timestamp) {
         super(id, username, firstName, lastName, description, contactInfo, albums, ratings, events, chatRooms,
-                new Subscription(id, Subscription.Type.FREEMIUM, subscriptionStatus, subscriptionOffer, null),
+                new Subscription(id, Subscription.Type.FREEMIUM, subscriptionStatus, subscriptionOffer, cardId),
                 bulletins, Authority.PARTICIPANT, timestamp);
         _idols = idols;
-        _subscription.get_user().set_username(_username);
-        _subscription.get_user().set_description(_description);
+        _subscription.set_user(this);
         setSubscriptionUser();
     }
 
     public Participant(long id, String username, String description,
                        ContactInfo contactInfo, Liszt<Album> albums, Liszt<Rating> ratings, Liszt<Event> events,
                        Liszt<ChatRoom> chatRooms, Subscription.Status subscriptionStatus,
-                       SubscriptionOffer subscriptionOffer, Liszt<Bulletin> bulletins, Liszt<User> idols,
+                       SubscriptionOffer subscriptionOffer, Long cardId, Liszt<Bulletin> bulletins, Liszt<User> idols,
                        LocalDateTime timestamp) {
         super(id, username, description, contactInfo, albums, ratings, events, chatRooms,
-                new Subscription(id, Subscription.Type.FREEMIUM, subscriptionStatus, subscriptionOffer, null),
+                new Subscription(id, Subscription.Type.FREEMIUM, subscriptionStatus, subscriptionOffer, cardId),
                 bulletins, Authority.PARTICIPANT, timestamp);
         _idols = idols;
         _subscription.get_user().set_username(_username);

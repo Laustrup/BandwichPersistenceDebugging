@@ -341,7 +341,7 @@ CREATE TABLE subscriptions(
     offer_expires DATETIME,
     offer_effect DOUBLE,
 
-    card_id BIGINT(20) NOT NULL,
+    card_id BIGINT(20),
     PRIMARY KEY (user_id),
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(card_id) REFERENCES cards(id)

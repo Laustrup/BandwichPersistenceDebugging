@@ -101,8 +101,10 @@ public class Subscription extends Model {
      * @return The User of this Subscription.
      */
     public User set_user(User user) {
-        if (user == null)
+        if (user == null) {
             _user = user;
+            defineType(_type);
+        }
 
         return _user;
     }
@@ -122,7 +124,7 @@ public class Subscription extends Model {
     private Type defineType(Type type) {
         _type = type;
 
-        if (_user.getClass() != Artist.class && _user.getClass() != Band.class) {
+        if (_user != null && (_user.getClass() != Artist.class && _user.getClass() != Band.class)) {
             switch (_type) {
                 case PREMIUM_BAND -> {
                     if (_user.getClass() == Band.class) _price = 100;

@@ -239,7 +239,7 @@ public class TestItems extends JTest {
                     randomizeRatings(), new Liszt<>(), new Liszt<>(), Subscription.Status.ACCEPTED,
                     new SubscriptionOffer(TimeService.get_instance().generateRandom(),
                             _random.nextBoolean() ? SubscriptionOffer.Type.SALE : SubscriptionOffer.Type.FREE_TRIAL,
-                            _random.nextDouble(1)), new Liszt<>(), new Liszt<>(), LocalDateTime.now());
+                            _random.nextDouble(1)), _random.nextLong(3)+1, new Liszt<>(), new Liszt<>(), LocalDateTime.now());
         }
     }
 
