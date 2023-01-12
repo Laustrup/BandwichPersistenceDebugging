@@ -1,6 +1,9 @@
 package laustrup.bandwichpersistencedebugging.models.users.sub_users.bands;
 
 import laustrup.bandwichpersistencedebugging.models.chats.Request;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.RequestDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.bands.ArtistDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.bands.BandDTO;
 import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.Rating;
 import laustrup.bandwichpersistencedebugging.models.albums.Album;
@@ -23,7 +26,6 @@ import java.time.LocalDateTime;
  * An Artist can either be a solo Performer or member of a Band, which changes the Subscription, if it ain't freemium.
  * Extends from Performer.
  */
-@NoArgsConstructor
 public class Artist extends Performer {
 
     /**
@@ -44,6 +46,22 @@ public class Artist extends Performer {
     @Getter
     private Liszt<Request> _requests;
 
+    public Artist(ArtistDTO artist) {
+        super(artist.getPrimaryId(), artist.getUsername(), artist.getFirstName(), artist.getLastName(),
+                artist.getDescription(), new ContactInfo(artist.getContactInfo()), Authority.ARTIST, artist.getAlbums(),
+                artist.getRatings(), artist.getEvents(), artist.getGigs(), artist.getChatRooms(),
+                new Subscription(artist.getSubscription()), artist.getBulletins(), artist.getFans(), artist.getIdols(),
+                artist.getTimestamp());
+        _bands = new Liszt<>();
+        for (BandDTO band : artist.getBands())
+            _bands.add(new Band(band));
+
+        _runner = artist.getRunner();
+
+        _requests = new Liszt<>();
+        for (RequestDTO request : artist.getRequests())
+            _requests.add(new Request(request));
+    }
     public Artist(long id) {
         super(id);
     }

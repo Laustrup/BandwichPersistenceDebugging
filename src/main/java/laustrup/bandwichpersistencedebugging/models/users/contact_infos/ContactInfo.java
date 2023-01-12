@@ -1,8 +1,9 @@
 package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+
+import laustrup.bandwichpersistencedebugging.models.dtos.users.contact_infos.ContactInfoDTO;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,6 @@ import java.time.LocalDateTime;
 /**
  * Contains information that people need in order to contact the User.
  */
-@NoArgsConstructor
 public class ContactInfo extends Model {
 
     /**
@@ -37,6 +37,13 @@ public class ContactInfo extends Model {
     @Getter
     private Country _country;
 
+    public ContactInfo(ContactInfoDTO contactInfo) {
+        super(contactInfo.getPrimaryId(), "Contact-info: "+contactInfo.getPrimaryId(), contactInfo.getTimestamp());
+        _email = contactInfo.getEmail();
+        _phone = new Phone(contactInfo.getPhone());
+        _address = new Address(contactInfo.getAddress());
+        _country = new Country(contactInfo.getCountry());
+    }
     public ContactInfo(long id, String email, Phone phone, Address address, Country country, LocalDateTime timestamp) {
         super(id, "Contact-info: "+id, timestamp);
         _email = email;

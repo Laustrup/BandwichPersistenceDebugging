@@ -1,5 +1,7 @@
 package laustrup.bandwichpersistencedebugging.models.users.sub_users.bands;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.bands.ArtistDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.bands.BandDTO;
 import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.Rating;
 import laustrup.bandwichpersistencedebugging.models.albums.Album;
@@ -14,7 +16,6 @@ import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Subscrip
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,6 @@ import java.util.InputMismatchException;
 /**
  * Extends performer and contains Artists as members
  */
-@NoArgsConstructor
 public class Band extends Performer {
 
     /**
@@ -38,6 +38,18 @@ public class Band extends Performer {
     @Getter @Setter
     private String _runner;
 
+    public Band(BandDTO band) {
+        super(band.getPrimaryId(), band.getUsername(), band.getDescription(), new ContactInfo(band.getContactInfo()),
+                Authority.BAND, band.getAlbums(), band.getRatings(), band.getEvents(), band.getGigs(), band.getChatRooms(),
+                new Subscription(band.getSubscription()), band.getBulletins(), band.getFans(), band.getIdols(), band.getTimestamp());
+        _username = band.getUsername();
+
+        _members = new Liszt<>();
+        for (ArtistDTO member : band.getMembers())
+            _members.add(new Artist(member));
+
+        _runner = band.getRunner();
+    }
     public Band(long id) {
         super(id);
     }

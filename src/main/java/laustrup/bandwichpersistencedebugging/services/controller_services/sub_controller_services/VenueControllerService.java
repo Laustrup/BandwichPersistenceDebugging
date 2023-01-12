@@ -2,6 +2,7 @@ package laustrup.bandwichpersistencedebugging.services.controller_services.sub_c
 
 
 import laustrup.bandwichpersistencedebugging.models.Response;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.venues.VenueDTO;
 import laustrup.bandwichpersistencedebugging.models.users.Login;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.venues.Venue;
 import laustrup.bandwichpersistencedebugging.services.controller_services.ControllerService;
@@ -10,7 +11,7 @@ import laustrup.bandwichpersistencedebugging.services.persistence_services.entit
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class VenueControllerService extends ControllerService<Venue> {
+public class VenueControllerService extends ControllerService<VenueDTO> {
 
     /**
      * Singleton instance of the Service.
@@ -34,9 +35,9 @@ public class VenueControllerService extends ControllerService<Venue> {
      * @param venue The Participant that is wished to be created.
      * @return A ResponseEntity with the Response of Venue and the HttpStatus.
      */
-    public ResponseEntity<Response<Venue>> create(Venue venue, String password) {
+    public ResponseEntity<Response<VenueDTO>> create(Venue venue, String password) {
         if (new Login(venue.get_username(), password).passwordIsValid())
-            return entityContent(VenuePersistenceService.get_instance().create(venue,password));
+            return entityContent(new VenueDTO(VenuePersistenceService.get_instance().create(venue,password)));
         else
             return new ResponseEntity<>(new Response<>(null, Response.StatusType.INVALID_PASSWORD_FORMAT),
                     HttpStatus.NOT_ACCEPTABLE);

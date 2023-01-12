@@ -1,6 +1,7 @@
 package laustrup.bandwichpersistencedebugging.models.users.subscriptions;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.subscriptions.SubscriptionDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Artist;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
@@ -16,7 +17,6 @@ import java.time.LocalDateTime;
  * Defines the kind of subscription a user is having.
  * Only Artists and Bands can have a paying subscription.
  */
-@NoArgsConstructor
 public class Subscription extends Model {
 
     /**
@@ -56,6 +56,15 @@ public class Subscription extends Model {
     @Getter
     private Long _cardId;
 
+    public Subscription(SubscriptionDTO subscription) {
+        super(subscription.getPrimaryId(), subscription.getSecondaryId(),
+                subscription.getUser().getUsername()+"-Subscription: " + subscription.getUser().getPrimaryId(),
+                subscription.getTimestamp());
+        _type = defineType(Type.valueOf(subscription.getType().toString()));
+        _status = Status.valueOf(subscription.getStatus().toString());
+        _offer = new SubscriptionOffer(subscription.getOffer());
+        _cardId = subscription.getCardId();
+    }
     public Subscription(User user, Type type, Status status, SubscriptionOffer offer, Long cardId, LocalDateTime timestamp) {
         super(user.get_primaryId(), cardId, user.get_username()+"-Subscription: " + user.get_primaryId(), timestamp);
         _type = defineType(type);

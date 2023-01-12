@@ -4,10 +4,17 @@ import laustrup.bandwichpersistencedebugging.models.Model;
 import laustrup.bandwichpersistencedebugging.models.albums.Album;
 import laustrup.bandwichpersistencedebugging.models.chats.Request;
 import laustrup.bandwichpersistencedebugging.models.chats.messages.Bulletin;
+import laustrup.bandwichpersistencedebugging.models.dtos.albums.AlbumDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.RequestDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.messages.BulletinDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.events.EventDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.events.GigDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.events.ParticipationDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.contact_infos.ContactInfo;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.Performer;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.venues.Venue;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
@@ -21,7 +28,6 @@ import java.util.*;
 /**
  * An Event is placed a gig, where a venue is having bands playing at specific times.
  */
-@NoArgsConstructor
 public class Event extends Model {
 
     /**
@@ -151,6 +157,62 @@ public class Event extends Model {
     @Getter @Setter
     private Liszt<Album> _albums;
 
+    public Event(EventDTO event) {
+        super(event.getPrimaryId(), event.getTitle(), event.getTimestamp());
+
+        _description = event.getDescription();
+
+        _gigs = new Liszt<>();
+        for (GigDTO gig : event.getGigs())
+            _gigs.add(new Gig(gig));
+
+        if (!_gigs.isEmpty())
+            try {
+                calculateTime();
+            } catch (InputMismatchException e) {
+                Printer.get_instance().print("End date is before beginning date of " + _title + "...", e);
+            }
+        else {
+            _start = event.getOpenDoors() != null ? event.getOpenDoors() : null;
+            _end = event.getEnd() != null ? event.getEnd() : (event.getOpenDoors() != null ? event.getOpenDoors() : null);
+            _length = _start != null && _end != null ? Duration.between(_start,_end).toMinutes() : 0;
+        }
+
+        if (_start != null && _end != null)
+            if (Duration.between(event.getOpenDoors(), _start).toMinutes() >= 0)
+                _openDoors = event.getOpenDoors();
+            else
+                throw new InputMismatchException();
+
+        _voluntary = new Plato(event.getIsVoluntary());
+        _public = new Plato(event.getIsPublic());
+        _cancelled = new Plato(event.getIsCancelled());
+        _soldOut = new Plato(event.getIsSoldOut());
+        _price = event.getPrice();
+        _ticketsURL = event.getTicketsURL();
+        _contactInfo = new ContactInfo(event.getContactInfo());
+        _venue = (Venue) DTOService.get_instance().convertFromDTO(event.getVenue());
+
+        _location = event.getLocation() == null || event.getLocation().isEmpty() ?
+                (event.getVenue() != null ? (event.getLocation() != null ? event.getLocation() : null)
+                        : null) : event.getLocation();
+
+        _requests = new Liszt<>();
+        for (RequestDTO request : event.getRequests())
+            _requests.add(new Request(request));
+
+        _participations = new Liszt<>();
+        for (ParticipationDTO participation : event.getParticipations())
+            _participations.add(new Participation(participation));
+
+        _bulletins = new Liszt<>();
+        for (BulletinDTO bulletin : event.getBulletins())
+            _bulletins.add(new Bulletin(bulletin));
+
+        _albums = new Liszt<>();
+        for (AlbumDTO album : event.getAlbums())
+            _albums.add(new Album(album));
+    }
     public Event(long id) {
         super(id);
     }
@@ -165,12 +227,14 @@ public class Event extends Model {
         _description = description;
         _gigs = gigs;
 
-        if (_start != null && _end != null)
+        if (!_gigs.isEmpty())
             try {
                 calculateTime();
             } catch (InputMismatchException e) {
                 Printer.get_instance().print("End date is before beginning date of " + _title + "...", e);
             }
+        else
+            _start = openDoors;
 
         if (_start != null && _end != null)
             if (Duration.between(openDoors, _start).toMinutes() >= 0)

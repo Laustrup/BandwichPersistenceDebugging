@@ -19,30 +19,30 @@ public class RequestDTO extends ModelDTO {
     /**
      * The User that needs to approve the Event.
      */
-    private UserDTO _user;
+    private UserDTO user;
 
     /**
      * The Event that has been requested for.
      */
-    private EventDTO _event;
+    private EventDTO event;
 
     /**
      * The value that indicates if the request for the Event has been approved.
      */
-    private Plato.Argument _approved;
+    private Plato.Argument approved;
 
     /**
      * This message will be shown for the user, in order to inform of the request.
      */
-    private String _message;
+    private String message;
 
     public RequestDTO(Request request) {
         super(request.get_user().get_primaryId(), request.get_event().get_primaryId(),
                 "Request of " + request.get_user().get_username() + " to " + request.get_event().get_title(),
                 request.get_timestamp());
-        _user = DTOService.get_instance().convertToDTO(request.get_user());
-        _event = new EventDTO(request.get_event());
-        _approved = request.get_approved().get_argument();
-        _message = request.get_message();
+        user = DTOService.get_instance().convertToDTO(request.get_user());
+        event = new EventDTO(request.get_event());
+        approved = request.get_approved().get_argument();
+        message = request.get_message();
     }
 }

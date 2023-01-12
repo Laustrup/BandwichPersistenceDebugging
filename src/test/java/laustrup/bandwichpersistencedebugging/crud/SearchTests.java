@@ -30,6 +30,6 @@ public class SearchTests extends JTest {
         calculatePerformance("search " + query);
 
         //ARRANGE
-        assertTrue(search != null && (!search.get_events().isEmpty() || !search.get_users().isEmpty()));
+        assertTrue(search != null && (search.getEvents().length > 0 || search.getUsers().length > 0));
     }
 }

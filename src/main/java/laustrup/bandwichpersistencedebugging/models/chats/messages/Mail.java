@@ -1,20 +1,25 @@
 package laustrup.bandwichpersistencedebugging.models.chats.messages;
 
 import laustrup.bandwichpersistencedebugging.models.chats.ChatRoom;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.messages.MailDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 public class Mail extends Message {
 
     @Getter
     private ChatRoom _chatRoom;
 
+    public Mail(MailDTO mail) {
+        super(mail.getPrimaryId(), DTOService.get_instance().convertFromDTO(mail.getAuthor()),
+                mail.getContent(), mail.isSent(), new Plato(mail.getIsEdited()), mail.isPublic(), mail.getTimestamp());
+        _chatRoom = new ChatRoom(mail.getChatRoom());
+    }
     public Mail(long id, ChatRoom chatRoom, User author, String content,
                 boolean isSent, Plato isEdited, boolean isPublic,
                 LocalDateTime timestamp) {

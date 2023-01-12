@@ -1,16 +1,18 @@
 package laustrup.bandwichpersistencedebugging.models.events;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+import laustrup.bandwichpersistencedebugging.models.dtos.events.ParticipationDTO;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
+
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 /**
  * Determines type of which a Participant is participating in an Event.
  */
-@NoArgsConstructor @Data
+@Data
 public class Participation extends Model {
 
     /**
@@ -28,6 +30,16 @@ public class Participation extends Model {
      */
     private ParticipationType _type;
 
+    public Participation(ParticipationDTO participation) {
+        super(participation.getEvent().getPrimaryId(), participation.getParticipant().getPrimaryId(),
+                "Participation of participant " +
+                        participation.getParticipant().getPrimaryId() + " AND Event " +
+                        participation.getEvent().getPrimaryId()
+        );
+        _participant = (Participant) DTOService.get_instance().convertFromDTO(participation.getParticipant());
+        _event = new Event(participation.getEvent());
+        _type = ParticipationType.valueOf(participation.getType().toString());
+    }
     public Participation(Participant participant, Event event, ParticipationType type) {
         super(event.get_primaryId(), participant.get_primaryId(),
                 "Participation of participant " +

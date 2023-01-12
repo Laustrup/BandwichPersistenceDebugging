@@ -1,13 +1,12 @@
 package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.users.contact_infos.AddressDTO;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * Contains values that determines address attributes.
  */
-@NoArgsConstructor
 public class Address {
 
     /**
@@ -33,6 +32,13 @@ public class Address {
      */
     @Getter @Setter
     private String _city;
+
+    public Address(AddressDTO address) {
+        _street = address.getStreet();
+        _floor = address.getFloor();
+        _postal = address.getPostal();
+        _city = address.getCity();
+    }
 
     public Address(String street, String floor, String postal, String city) {
         _street = street;

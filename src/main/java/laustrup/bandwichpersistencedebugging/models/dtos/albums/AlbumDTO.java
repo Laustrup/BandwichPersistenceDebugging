@@ -2,6 +2,7 @@ package laustrup.bandwichpersistencedebugging.models.dtos.albums;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
 import laustrup.bandwichpersistencedebugging.models.albums.Album;
+import laustrup.bandwichpersistencedebugging.models.dtos.ModelDTO;
 import laustrup.bandwichpersistencedebugging.models.dtos.users.UserDTO;
 
 import laustrup.bandwichpersistencedebugging.services.DTOService;
@@ -9,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor @Data
-public class AlbumDTO extends Model {
+public class AlbumDTO extends ModelDTO {
 
     /**
      * These endpoints are being used for getting the image/music file.

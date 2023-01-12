@@ -1,14 +1,16 @@
 package laustrup.bandwichpersistencedebugging.services.controller_services.sub_controller_services;
 
 import laustrup.bandwichpersistencedebugging.models.Response;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.bands.BandDTO;
 import laustrup.bandwichpersistencedebugging.models.users.Login;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
 import laustrup.bandwichpersistencedebugging.services.controller_services.ControllerService;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.entity_services.sub_entity_services.BandPersistenceService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class BandControllerService extends ControllerService<Band> {
+public class BandControllerService extends ControllerService<BandDTO> {
 
     /**
      * Singleton instance of the Service.
@@ -33,10 +35,11 @@ public class BandControllerService extends ControllerService<Band> {
      * @param password The password assigned for the Band.
      * @return A ResponseEntity with the Response of Band and the HttpStatus.
      */
-    public ResponseEntity<Response<Band>> create(Band band, String password) {
+    public ResponseEntity<Response<BandDTO>> create(Band band, String password) {
         if (new Login(band.get_username(), password).passwordIsValid())
-            return entityContent(BandPersistenceService.get_instance().create(band, password));
+            return entityContent(new BandDTO(BandPersistenceService.get_instance().create(band, password)));
         else
-            return new ResponseEntity<>(new Response<>(band, Response.StatusType.INVALID_PASSWORD_FORMAT), HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(new Response<>(new BandDTO(band), Response.StatusType.INVALID_PASSWORD_FORMAT),
+                    HttpStatus.NOT_ACCEPTABLE);
     }
 }

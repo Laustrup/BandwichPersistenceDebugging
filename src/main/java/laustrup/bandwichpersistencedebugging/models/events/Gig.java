@@ -1,17 +1,19 @@
 package laustrup.bandwichpersistencedebugging.models.events;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+import laustrup.bandwichpersistencedebugging.models.dtos.events.GigDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.PerformerDTO;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.Performer;
 
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 /**
  * Determines a specific gig of one band for a specific time.
  */
-@NoArgsConstructor @Data
+@Data
 public class Gig extends Model {
     /**
      * The Event of this Gig.
@@ -32,6 +34,20 @@ public class Gig extends Model {
      * The end of the Gig, where the act will end.
      */
     private LocalDateTime _end;
+
+    public Gig(GigDTO gig) {
+        super(gig.getPrimaryId(), "Gig:"+gig.getPrimaryId(), gig.getTimestamp());
+        _event = new Event(gig.getEvent());
+        _act = new Performer[gig.getAct().length];
+        _act = convert(gig.getAct());
+        _start = gig.getStart();
+        _end = gig.getEnd();
+    }
+    private Performer[] convert(PerformerDTO[] act) {
+        for (int i = 0; i < act.length; i++)
+            _act[i] = (Performer) DTOService.get_instance().convertFromDTO(act[i]);
+        return _act;
+    }
 
     public Gig(Performer[] act) {
         super("New gig");

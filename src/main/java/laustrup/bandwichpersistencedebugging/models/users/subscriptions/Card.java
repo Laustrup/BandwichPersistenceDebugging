@@ -1,5 +1,6 @@
 package laustrup.bandwichpersistencedebugging.models.users.subscriptions;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.users.subscriptions.CardDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import java.util.InputMismatchException;
 /**
  * Contains different information about credit cards, that are needed for curtain subscriptions.
  */
-@NoArgsConstructor @ToString
+@ToString
 public class Card {
 
     /**
@@ -59,6 +60,15 @@ public class Card {
     @Getter
     private int _cVV;
 
+    public Card(CardDTO card) throws InputMismatchException {
+        _id = card.getId();
+        _type = Type.valueOf(card.getType().toString());
+        _owner = card.getOwner();
+        set_cardNumbers(card.getCardNumbers());
+        set_expirationMonth(card.getExpirationMonth());
+        _expirationYear = card.getExpirationYear();
+        set_cVV(card.getCVV());
+    }
     public Card(long id, Type type, String owner, long numbers,
                 int expirationMonth, int expirationYear,
                 int cVV) throws InputMismatchException {

@@ -1,5 +1,6 @@
 package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.users.contact_infos.CountryDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -7,7 +8,7 @@ import lombok.ToString;
 /**
  * An object with information about a curtain Country.
  */
-@NoArgsConstructor @ToString
+@ToString
 public class Country {
 
     /**
@@ -28,6 +29,11 @@ public class Country {
     @Getter
     private int _firstPhoneNumberDigits;
 
+    public Country(CountryDTO country) {
+        _title = country.getTitle();
+        _indexes = CountryIndexes.valueOf(country.getIndexes().toString());
+        _firstPhoneNumberDigits = country.getFirstPhoneNumberDigits();
+    }
     public Country(String title, CountryIndexes indexes, int firstPhoneNumberDigits) {
         _title = title;
         _indexes = indexes;

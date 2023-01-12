@@ -31,12 +31,12 @@ public abstract class PerformerDTO extends ParticipantDTO {
     /**
      * Describes all the gigs, that the Performer is a part of an act.
      */
-    protected GigDTO[] _gigs;
+    protected GigDTO[] gigs;
 
     /**
      * All the participants that are following this Performer, is included here.
      */
-    protected UserDTO[] _fans;
+    protected UserDTO[] fans;
 
     public PerformerDTO(long id, String username, String firstName, String lastName, String description,
                         ContactInfo contactInfo, Authority authority, Liszt<Album> albums, Liszt<Rating> ratings,
@@ -45,12 +45,12 @@ public abstract class PerformerDTO extends ParticipantDTO {
         super(new Participant(id, username, firstName, lastName, description, contactInfo, albums, ratings, events,
                 chatRooms, subscription, bulletins, idols, timestamp));
         this.authority = authority;
-        _gigs = new GigDTO[gigs.size()];
-        for (int i = 0; i < _gigs.length; i++)
-            _gigs[i] = new GigDTO(gigs.get(i+1));
-        _fans = new UserDTO[fans.size()];
-        for (int i = 0; i < _fans.length; i++)
-            _fans[i] = DTOService.get_instance().convertToDTO(fans.get(i+1));
+        this.gigs = new GigDTO[gigs.size()];
+        for (int i = 0; i < this.gigs.length; i++)
+            this.gigs[i] = new GigDTO(gigs.get(i+1));
+        this.fans = new UserDTO[fans.size()];
+        for (int i = 0; i < this.fans.length; i++)
+            this.fans[i] = DTOService.get_instance().convertToDTO(fans.get(i+1));
     }
 
     public PerformerDTO(long id, String username, String description, ContactInfo contactInfo, Authority authority,
@@ -60,11 +60,11 @@ public abstract class PerformerDTO extends ParticipantDTO {
         super(new Participant(id, username, description, contactInfo, albums, ratings, events,
                 chatRooms, subscription, bulletins, idols, timestamp));
         this.authority = authority;
-        _gigs = new GigDTO[gigs.size()];
-        for (int i = 0; i < _gigs.length; i++)
-            _gigs[i] = new GigDTO(gigs.get(i+1));
-        _fans = new UserDTO[fans.size()];
-        for (int i = 0; i < _fans.length; i++)
-            _fans[i] = DTOService.get_instance().convertToDTO(fans.get(i+1));
+        this.gigs = new GigDTO[gigs.size()];
+        for (int i = 0; i < this.gigs.length; i++)
+            this.gigs[i] = new GigDTO(gigs.get(i+1));
+        this.fans = new UserDTO[fans.size()];
+        for (int i = 0; i < this.fans.length; i++)
+            this.fans[i] = DTOService.get_instance().convertToDTO(fans.get(i+1));
     }
 }

@@ -1,14 +1,16 @@
 package laustrup.bandwichpersistencedebugging.services.controller_services.sub_controller_services;
 
 import laustrup.bandwichpersistencedebugging.models.Response;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.participants.ParticipantDTO;
 import laustrup.bandwichpersistencedebugging.models.users.Login;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.services.controller_services.ControllerService;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.entity_services.sub_entity_services.ParticipantPersistenceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ParticipantControllerService extends ControllerService<Participant> {
+public class ParticipantControllerService extends ControllerService<ParticipantDTO> {
 
     /**
      * Singleton instance of the Service.
@@ -32,9 +34,12 @@ public class ParticipantControllerService extends ControllerService<Participant>
      * @param participant The Participant that is wished to be created.
      * @return A ResponseEntity with the Response of Participant and the HttpStatus.
      */
-    public ResponseEntity<Response<Participant>> create(Participant participant, String password) {
+    public ResponseEntity<Response<ParticipantDTO>> create(Participant participant, String password) {
         if (new Login(participant.get_username(), password).passwordIsValid())
-            return entityContent(ParticipantPersistenceService.get_instance().create(participant,password));
+            return entityContent((ParticipantDTO) DTOService.get_instance().convertToDTO(
+                    ParticipantPersistenceService.get_instance().create(participant,password)
+                    )
+            );
         else
             return new ResponseEntity<>(new Response<>(null, Response.StatusType.INVALID_PASSWORD_FORMAT),
                     HttpStatus.NOT_ACCEPTABLE);

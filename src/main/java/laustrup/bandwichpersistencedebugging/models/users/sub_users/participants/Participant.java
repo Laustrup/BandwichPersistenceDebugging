@@ -1,5 +1,12 @@
 package laustrup.bandwichpersistencedebugging.models.users.sub_users.participants;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.RatingDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.albums.AlbumDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.ChatRoomDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.messages.BulletinDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.events.EventDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.UserDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.users.sub_users.participants.ParticipantDTO;
 import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.Rating;
 import laustrup.bandwichpersistencedebugging.models.albums.Album;
@@ -9,10 +16,10 @@ import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.contact_infos.ContactInfo;
 import laustrup.bandwichpersistencedebugging.models.users.subscriptions.Subscription;
 import laustrup.bandwichpersistencedebugging.models.users.subscriptions.SubscriptionOffer;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +27,6 @@ import java.time.LocalDateTime;
  * Defines a User, that will attend an Event as an audience.
  * Extends from User.
  */
-@NoArgsConstructor
 public class Participant extends User {
 
     /**
@@ -30,6 +36,26 @@ public class Participant extends User {
     @Getter
     private Liszt<User> _idols;
 
+    public Participant(ParticipantDTO participant) {
+        super(participant.getPrimaryId(), participant.getUsername(), participant.getFirstName(), participant.getLastName(),
+                participant.getDescription(), new ContactInfo(participant.getContactInfo()), participant.getAlbums(),
+                participant.getRatings(), participant.getEvents(), participant.getChatRooms(),
+                new Subscription(participant.getSubscription()), participant.getBulletins(), Authority.PARTICIPANT,
+                participant.getTimestamp());
+        _idols = new Liszt<>();
+        for (UserDTO idol : participant.getIdols())
+            _idols.add(DTOService.get_instance().convertFromDTO(idol));
+    }
+    public Participant(long id, String username, String firstName, String lastName, String description,
+                       ContactInfo contactInfo, AlbumDTO[] albums, RatingDTO[] ratings,
+                       EventDTO[] events, ChatRoomDTO[] chatRooms, Subscription subscription, BulletinDTO[] bulletins,
+                       UserDTO[] idols, LocalDateTime timestamp) {
+        super(id, username, firstName, lastName, description, contactInfo, albums, ratings, events, chatRooms,
+                subscription, bulletins, Authority.PARTICIPANT, timestamp);
+        _idols = new Liszt<>();
+        for (UserDTO idol : idols)
+            _idols.add(DTOService.get_instance().convertFromDTO(idol));
+    }
     public Participant(long id) {
         super(id);
     }
@@ -82,7 +108,7 @@ public class Participant extends User {
     public Participant(String username, String firstName, String lastName, String description,
                        SubscriptionOffer subscriptionOffer, Liszt<User> idols) {
         super(username, firstName, lastName, description,
-                new Subscription(new Participant(), Subscription.Type.FREEMIUM,
+                new Subscription(new Participant(0), Subscription.Type.FREEMIUM,
                         Subscription.Status.ACCEPTED, subscriptionOffer, null),
                 Authority.PARTICIPANT);
         _idols = idols;

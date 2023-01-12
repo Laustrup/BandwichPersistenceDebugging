@@ -1,5 +1,6 @@
 package laustrup.bandwichpersistencedebugging.models.users.subscriptions;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.users.subscriptions.SubscriptionOfferDTO;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.InputMismatchException;
 /**
  * This offer determines, if the price of a Subscription should be changed through its attributes.
  */
-@NoArgsConstructor @ToString
+@ToString
 public class SubscriptionOffer {
 
     /**
@@ -32,6 +33,15 @@ public class SubscriptionOffer {
      */
     private double _effect;
 
+    public SubscriptionOffer(SubscriptionOfferDTO offer) {
+        _expires = offer.getExpires();
+        _type = Type.valueOf(offer.getType().toString());
+        try {
+            set_effect(offer.getEffect());
+        } catch (InputMismatchException e) {
+            Printer.get_instance().print("Couldn't create effect to subscription offer...", e);
+        }
+    }
     public SubscriptionOffer(LocalDateTime expires, Type type, double effect) {
         _expires = expires;
         _type = type;

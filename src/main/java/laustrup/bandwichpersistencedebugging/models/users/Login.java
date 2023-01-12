@@ -1,9 +1,9 @@
 package laustrup.bandwichpersistencedebugging.models.users;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.users.LoginDTO;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.InputMismatchException;
  * Is use for logging in a user.
  * Can check validations of email and password.
  */
-@NoArgsConstructor @ToString
+@ToString
 public class Login {
 
     /**
@@ -36,6 +36,7 @@ public class Login {
     @Getter
     private LocalDateTime _timestamp;
 
+    public Login(LoginDTO login) { this(login.getUsername(), login.getPassword()); }
     public Login(String username, String password) {
         _username = username;
         _password = password;

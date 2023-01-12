@@ -1,20 +1,26 @@
 package laustrup.bandwichpersistencedebugging.models.chats.messages;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.messages.BulletinDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 public class Bulletin extends Message {
 
     @Getter
     public Model _receiver;
 
+    public Bulletin(BulletinDTO bulletin) {
+        super(bulletin.getPrimaryId(), DTOService.get_instance().convertFromDTO(bulletin.getAuthor()),
+                bulletin.getContent(), bulletin.isSent(), new Plato(bulletin.getIsEdited()), bulletin.isPublic(),
+                bulletin.getTimestamp());
+        _receiver = DTOService.get_instance().convertFromDTO(bulletin.getReceiver());
+    }
     public Bulletin(long id, User author, Model receiver, String content,
                     boolean isSent, Plato isEdited, boolean isPublic,
                     LocalDateTime timestamp) {

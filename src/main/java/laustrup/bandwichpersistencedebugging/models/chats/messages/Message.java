@@ -1,11 +1,12 @@
 package laustrup.bandwichpersistencedebugging.models.chats.messages;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.messages.MessageDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,6 @@ import java.time.LocalDateTime;
 /**
  * An abstract class that contains common attributes for Messages.
  */
-@NoArgsConstructor
 public abstract class Message extends Model {
 
     /**
@@ -47,6 +47,14 @@ public abstract class Message extends Model {
     @Getter @Setter
     protected boolean _public;
 
+    public Message(MessageDTO message) {
+        super(message.getPrimaryId(), "Message-"+message.getPrimaryId(), message.getTimestamp());
+        _author = DTOService.get_instance().convertFromDTO(message.getAuthor());
+        _content = message.getContent();
+        _sent = message.isSent();
+        _edited = new Plato(message.getIsEdited());
+        _public = message.isPublic();
+    }
     public Message(long id, User author, String content, boolean isSent, Plato isEdited, boolean isPublic,
                    LocalDateTime timestamp) {
         super(id, "Message-"+id,timestamp);

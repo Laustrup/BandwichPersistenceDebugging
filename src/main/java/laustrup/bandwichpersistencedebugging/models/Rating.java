@@ -1,9 +1,10 @@
 package laustrup.bandwichpersistencedebugging.models;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.RatingDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,6 @@ import java.util.InputMismatchException;
  * Can be added to a model to indicate the rating that the model is appreciated.
  * Is created by a user.
  */
-@NoArgsConstructor
 public class Rating extends Model {
 
     /**
@@ -43,6 +43,13 @@ public class Rating extends Model {
     @Getter @Setter
     private String _comment;
 
+    public Rating(RatingDTO rating) throws InputMismatchException {
+        super(rating.getAppointed().getPrimaryId(), rating.getJudge().getPrimaryId(),
+                rating.getAppointed().getUsername()+"-"+rating.getJudge().getUsername(), rating.getTimestamp());
+        _value = set_value(rating.getValue());
+        _appointed = DTOService.get_instance().convertFromDTO(rating.getAppointed());
+        _judge = DTOService.get_instance().convertFromDTO(rating.getJudge());
+    }
     public Rating(int value) {
         _value = value;
     }

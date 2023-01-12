@@ -1,17 +1,18 @@
 package laustrup.bandwichpersistencedebugging.models.albums;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
+import laustrup.bandwichpersistencedebugging.models.dtos.albums.AlbumDTO;
+import laustrup.bandwichpersistencedebugging.models.dtos.albums.AlbumItemDTO;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Artist;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 public class Album extends Model {
 
     /**
@@ -29,6 +30,17 @@ public class Album extends Model {
     @Getter
     private User _author;
 
+    public Album(AlbumDTO album) {
+        super(album.getPrimaryId(), album.getTitle(), album.getTimestamp());
+        _items = new Liszt<>();
+        convert(album.getItems());
+        _author = DTOService.get_instance().convertFromDTO(album.getAuthor());
+    }
+    private Liszt<AlbumItem> convert(AlbumItemDTO[] dtos) {
+        for (AlbumItemDTO item : dtos)
+            _items.add(new AlbumItem(item));
+        return _items;
+    }
     public Album(long id, String title, Liszt<AlbumItem> items, User author,
                  LocalDateTime timestamp) {
         super(id, title, timestamp);

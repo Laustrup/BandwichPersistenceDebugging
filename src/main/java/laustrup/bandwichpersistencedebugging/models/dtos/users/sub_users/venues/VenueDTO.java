@@ -21,22 +21,22 @@ public class VenueDTO extends UserDTO {
     /**
      * The location that the Venue is located at, which could be an address or simple a place.
      */
-    private String _location;
+    private String location;
 
     /**
      * The description of the gear that the Venue posses.
      */
-    private String _gearDescription;
+    private String gearDescription;
 
     /**
      * The size of the stage and room, that Events can be held at.
      */
-    private int _size;
+    private int size;
 
     /**
      * The Requests requested for this Venue.
      */
-    private RequestDTO[] _requests;
+    private RequestDTO[] requests;
 
     public VenueDTO(Venue venue) {
         super(venue.get_primaryId(), venue.get_username(), venue.get_description(),
@@ -44,13 +44,13 @@ public class VenueDTO extends UserDTO {
                 venue.get_events(), venue.get_chatRooms(), new SubscriptionDTO(venue.get_subscription()),
                 venue.get_bulletins(), Authority.VENUE, venue.get_timestamp());
 
-        _location = venue.get_location();
+        location = venue.get_location();
 
-        _gearDescription = venue.get_gearDescription();
-        _size = venue.get_size();
-        _requests = new RequestDTO[venue.get_requests().size()];
-        for (int i = 0; i < _requests.length; i++)
-            _requests[i] = new RequestDTO(venue.get_requests().get(i+1));
+        gearDescription = venue.get_gearDescription();
+        size = venue.get_size();
+        requests = new RequestDTO[venue.get_requests().size()];
+        for (int i = 0; i < requests.length; i++)
+            requests[i] = new RequestDTO(venue.get_requests().get(i+1));
     }
 
     public VenueDTO(User user) {
@@ -60,13 +60,13 @@ public class VenueDTO extends UserDTO {
                 user.get_bulletins(), Authority.VENUE, user.get_timestamp());
 
         if (user.get_authority() == User.Authority.VENUE) {
-            _location = ((Venue) user).get_location();
+            location = ((Venue) user).get_location();
 
-            _gearDescription = ((Venue) user).get_gearDescription();
-            _size = ((Venue) user).get_size();
-            _requests = new RequestDTO[((Venue) user).get_requests().size()];
-            for (int i = 0; i < _requests.length; i++)
-                _requests[i] = new RequestDTO(((Venue) user).get_requests().get(i+1));
+            gearDescription = ((Venue) user).get_gearDescription();
+            size = ((Venue) user).get_size();
+            requests = new RequestDTO[((Venue) user).get_requests().size()];
+            for (int i = 0; i < requests.length; i++)
+                requests[i] = new RequestDTO(((Venue) user).get_requests().get(i+1));
         }
     }
 }

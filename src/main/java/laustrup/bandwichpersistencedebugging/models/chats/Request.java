@@ -1,8 +1,10 @@
 package laustrup.bandwichpersistencedebugging.models.chats;
 
+import laustrup.bandwichpersistencedebugging.models.dtos.chats.RequestDTO;
 import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.Model;
 import laustrup.bandwichpersistencedebugging.models.users.User;
+import laustrup.bandwichpersistencedebugging.services.DTOService;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 /**
  * Determines if a User have approved to be a part of the Event.
  */
-@NoArgsConstructor
 public class Request extends Model {
 
     /**
@@ -41,6 +42,15 @@ public class Request extends Model {
     @Getter @Setter
     private String _message;
 
+    public Request(RequestDTO request) {
+        super(request.getPrimaryId(), request.getEvent().getPrimaryId(),
+                "Request of " + request.getUser().getUsername() + " to " + request.getEvent().getTitle(),
+                request.getTimestamp());
+        _user = DTOService.get_instance().convertFromDTO(request.getUser());
+        _event = new Event(request.getEvent());
+        _approved = new Plato(request.getApproved());
+        _message = request.getMessage();
+    }
     public Request(User user, Event event, Plato approved, String message, LocalDateTime timestamp) {
         super(user.get_primaryId(), event.get_primaryId(), "Request of " + user.get_username() + " to " + event.get_title(),timestamp);
         _user = user;
