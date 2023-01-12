@@ -2,6 +2,7 @@ package laustrup.bandwichpersistencedebugging.models.users.subscriptions;
 
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.util.InputMismatchException;
 /**
  * This offer determines, if the price of a Subscription should be changed through its attributes.
  */
-@ToString
+@NoArgsConstructor @ToString
 public class SubscriptionOffer {
 
     /**

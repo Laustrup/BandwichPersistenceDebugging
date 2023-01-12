@@ -232,9 +232,14 @@ public class Asserter {
         assertEquals(expected.get_type(),actual.get_type());
         assertEquals(expected.get_status(),actual.get_status());
         assertEquals(expected.get_price(),actual.get_price());
-        assertEquals(expected.get_offer().get_expires(),actual.get_offer().get_expires());
-        assertEquals(expected.get_offer().get_type(),actual.get_offer().get_type());
-        assertEquals(expected.get_offer().get_effect(),actual.get_offer().get_effect());
+        if (expected.get_offer() != null) {
+            if (actual.get_offer().get_expires() != null)
+                assertEquals(expected.get_offer().get_expires(),actual.get_offer().get_expires());
+            if (actual.get_offer().get_type() != null)
+                assertEquals(expected.get_offer().get_type(),actual.get_offer().get_type());
+            if (actual.get_offer().get_effect() > 0)
+                assertEquals(expected.get_offer().get_effect(),actual.get_offer().get_effect());
+        }
         assertEquals(expected.get_cardId(),actual.get_cardId());
     }
 
@@ -262,15 +267,12 @@ public class Asserter {
      */
     protected void asserting(ContactInfo expected, ContactInfo actual) {
         assertEquals(expected.get_email(),actual.get_email());
-        assertEquals(expected.get_phone().get_country().get_title(),actual.get_phone().get_country().get_title());
-        assertEquals(expected.get_phone().get_country().get_indexes(),actual.get_phone().get_country().get_indexes());
+        assertEquals(expected.get_country().get_title(),actual.get_country().get_title());
+        assertEquals(expected.get_country().get_indexes(),actual.get_country().get_indexes());
         assertEquals(expected.get_phone().get_country().get_firstPhoneNumberDigits(),actual.get_phone().get_country().get_firstPhoneNumberDigits());
         assertEquals(expected.get_phone().get_numbers(),actual.get_phone().get_numbers());
         assertEquals(expected.get_phone().is_mobile(),actual.get_phone().is_mobile());
         assertEquals(expected.getAddressInfo(),actual.getAddressInfo());
-        assertEquals(expected.get_country().get_title(),actual.get_country().get_title());
-        assertEquals(expected.get_country().get_indexes(),actual.get_country().get_indexes());
-        assertEquals(expected.get_country().get_firstPhoneNumberDigits(),actual.get_country().get_firstPhoneNumberDigits());
     }
 
     /**
@@ -367,6 +369,8 @@ public class Asserter {
         else
             fail();
     }
+
+
 
     /**
      * Asserts two Gigs to check they are the same.

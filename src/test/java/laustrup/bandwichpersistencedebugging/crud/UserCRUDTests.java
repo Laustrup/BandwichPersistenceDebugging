@@ -252,6 +252,26 @@ class UserCRUDTests extends JTest {
         begin();
         Artist actual = ArtistPersistenceService.get_instance().create(expected,_password);
         calculatePerformance("creating " + authority);
+        expected = new Artist(actual.get_primaryId(), expected.get_username(), expected.get_firstName(),
+                expected.get_lastName(), expected.get_description(), expected.get_contactInfo(),new Liszt<>(),
+                new Liszt<>(), new Liszt<>(), new Liszt<>(), new Liszt<>(),
+                new Subscription(
+                        new Artist(
+                                actual.get_primaryId(), expected.get_username(), expected.get_firstName(),
+                                expected.get_lastName(), expected.get_description(), expected.get_contactInfo(),
+                                expected.get_albums(), expected.get_ratings(), expected.get_events(),
+                                expected.get_gigs(),expected.get_chatRooms(),
+                                    new Subscription(expected, Subscription.Type.FREEMIUM, Subscription.Status.ACCEPTED,
+                                            null, (long) 0,actual.get_subscription().get_timestamp()
+                                    ),
+                                expected.get_bulletins(), expected.get_bands(), expected.get_runner(),
+                                expected.get_fans(),expected.get_idols(),expected.get_requests(),expected.get_timestamp()
+                        ),
+                Subscription.Type.FREEMIUM, Subscription.Status.ACCEPTED, null, (long) 0,
+                actual.get_subscription().get_timestamp()),expected.get_bulletins(), expected.get_bands(),
+                expected.get_runner(), expected.get_fans(),expected.get_idols(),expected.get_requests(),
+                actual.get_timestamp()
+        );
 
         //ASSERT
         asserting(expected,actual,authority);

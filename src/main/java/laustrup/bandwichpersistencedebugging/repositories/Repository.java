@@ -1,5 +1,6 @@
 package laustrup.bandwichpersistencedebugging.repositories;
 
+import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
@@ -47,8 +48,9 @@ public abstract class Repository {
      * @return The boolean answer of the database success.
      */
     protected boolean edit(String sql, boolean doClose) {
+        handleConnection();
             try {
-                PreparedStatement statement = handleConnection().prepareStatement(sql);
+                PreparedStatement statement = connection().prepareStatement(sql);
                 boolean success = statement.executeUpdate() > 0;
 
                 if (doClose)

@@ -1,6 +1,7 @@
 package laustrup.bandwichpersistencedebugging.utilities;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 

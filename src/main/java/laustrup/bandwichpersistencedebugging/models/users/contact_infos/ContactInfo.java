@@ -2,6 +2,7 @@ package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 
 import laustrup.bandwichpersistencedebugging.models.Model;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 /**
  * Contains information that people need in order to contact the User.
  */
+@NoArgsConstructor
 public class ContactInfo extends Model {
 
     /**

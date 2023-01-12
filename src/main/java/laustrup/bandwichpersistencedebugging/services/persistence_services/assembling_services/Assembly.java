@@ -86,7 +86,9 @@ public class Assembly extends Assembler {
      * @param id The id of the User that is wished to be gathered.
      * @return The unassembled User.
      */
-    public User getUserUnassembled(long id) { return userAssembling(UserAssembly.get_instance().assemble(id,false), false); }
+    public User getUserUnassembled(long id) {
+        return userAssembling(UserAssembly.get_instance().assemble(id,false), false);
+    }
 
     /**
      * Gets a User object with the informations given from the UserRepository.

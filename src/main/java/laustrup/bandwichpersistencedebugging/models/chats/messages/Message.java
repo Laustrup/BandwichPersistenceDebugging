@@ -5,6 +5,7 @@ import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 /**
  * An abstract class that contains common attributes for Messages.
  */
+@NoArgsConstructor
 public abstract class Message extends Model {
 
     /**

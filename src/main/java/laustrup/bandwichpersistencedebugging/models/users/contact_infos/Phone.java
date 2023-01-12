@@ -1,13 +1,14 @@
 package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
  * Details about phone contacting information.
  */
-@ToString
+@NoArgsConstructor @ToString
 public class Phone {
 
     /**

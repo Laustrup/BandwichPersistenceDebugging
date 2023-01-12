@@ -5,13 +5,14 @@ import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
  * Is used for response of a search request,
  * contains different objects that are alike of the search query.
  */
-@ToString
+@NoArgsConstructor @ToString
 public class Search {
 
     /**

@@ -68,7 +68,7 @@ public abstract class JTest extends Asserter {
         long performance = Duration.between(_start, LocalDateTime.now()).toMillis();
 
         Printer.get_instance().print("The performance of current test is " + performance +
-                " in milliseconds and " + (performance / 1000) + " in minutes." );
+                " in milliseconds, " + (performance / 1000) + " in seconds and " + ((performance / 1000)/60)  + " in minutes");
 
         return performance;
     }
@@ -82,7 +82,7 @@ public abstract class JTest extends Asserter {
         long performance = Duration.between(_start, LocalDateTime.now()).toMillis();
 
         Printer.get_instance().print("The performance of current " + title + " is " + performance +
-                " in milliseconds and " + (performance / 1000) + " in minutes." );
+                " in milliseconds, " + (performance / 1000) + " in seconds and " + ((performance / 1000)/60)  + " in minutes");
 
         return performance;
     }

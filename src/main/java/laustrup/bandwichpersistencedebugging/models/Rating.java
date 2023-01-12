@@ -3,6 +3,7 @@ package laustrup.bandwichpersistencedebugging.models;
 import laustrup.bandwichpersistencedebugging.models.users.User;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.InputMismatchException;
  * Can be added to a model to indicate the rating that the model is appreciated.
  * Is created by a user.
  */
+@NoArgsConstructor
 public class Rating extends Model {
 
     /**
@@ -41,6 +43,9 @@ public class Rating extends Model {
     @Getter @Setter
     private String _comment;
 
+    public Rating(int value) {
+        _value = value;
+    }
     public Rating(int value, User appointed, User judge, LocalDateTime timestamp) throws InputMismatchException {
         super(appointed.get_primaryId(), judge.get_primaryId(), appointed.get_username()+"-"+judge.get_username(), timestamp);
         _value = set_value(value);

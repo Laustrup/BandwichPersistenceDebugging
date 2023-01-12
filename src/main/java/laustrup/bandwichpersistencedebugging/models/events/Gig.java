@@ -4,13 +4,14 @@ import laustrup.bandwichpersistencedebugging.models.Model;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.Performer;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 /**
  * Determines a specific gig of one band for a specific time.
  */
-@Data
+@NoArgsConstructor @Data
 public class Gig extends Model {
     /**
      * The Event of this Gig.

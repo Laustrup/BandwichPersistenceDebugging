@@ -13,6 +13,7 @@ import laustrup.bandwichpersistencedebugging.repositories.Repository;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -135,6 +136,59 @@ public class UserRepository extends Repository {
                 "INNER JOIN subscriptions ON users.id = subscriptions.user_id " +
                 "INNER JOIN contact_informations ON users.id = contact_informations.user_id " +
                 where + ";");
+    }
+
+    /**
+     * Will insert both ContactInformation and a generated Subscription.
+     * Is meant to be used, when a User will be inserted
+     * @param user The User that has been inserted.
+     * @return True if any rows has been affected.
+     */
+    public boolean createSubscriptionAndContactInfo(User user) {
+        return edit("INSERT INTO subscriptions(" +
+                    "user_id," +
+                    "`status`," +
+                    "subscription_type," +
+                    "offer_type," +
+                    "offer_expires," +
+                    "offer_effect," +
+                    "card_id" +
+                ") " +
+                "VALUES (" +
+                    user.get_primaryId() +
+                    ",'ACCEPTED'" +
+                    ",'FREEMIUM'" +
+                    ",NULL" +
+                    ",NULL" +
+                    ",NULL" +
+                    ",NULL" +
+                "); " +
+                "INSERT INTO contact_informations(" +
+                    "user_id," +
+                    "email," +
+                    "first_digits," +
+                    "phone_number," +
+                    "phone_is_mobile," +
+                    "street," +
+                    "floor," +
+                    "postal," +
+                    "city," +
+                    "country_title," +
+                    "country_indexes" +
+                ") " +
+                "VALUES (" +
+                    user.get_primaryId() + ",'" +
+                    user.get_contactInfo().get_email() + "'," +
+                    user.get_contactInfo().get_phone().get_country().get_firstPhoneNumberDigits() + "," +
+                    user.get_contactInfo().get_phone().get_numbers() + "," +
+                    user.get_contactInfo().get_phone().is_mobile() + ",'" +
+                    user.get_contactInfo().get_address().get_street() + "','" +
+                    user.get_contactInfo().get_address().get_floor() + "','" +
+                    user.get_contactInfo().get_address().get_postal() + "','" +
+                    user.get_contactInfo().get_address().get_city() + "','" +
+                    user.get_contactInfo().get_country().get_title() + "','" +
+                    user.get_contactInfo().get_country().get_indexes() + "'" +
+                ");", false);
     }
 
     /**

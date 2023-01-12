@@ -11,3 +11,4 @@ The original project can be found at [BandwichPersistence](https://github.com/La
 * LEFT JOIN SELECTS for if users doesn't have anything in table.
 * Extra test methods added.
 * Fixed a stackoverflow error of continuing reads of relation fields.
+* JDBC connection URL has ?allowMultiQueries=true added.

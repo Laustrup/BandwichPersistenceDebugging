@@ -1,11 +1,13 @@
 package laustrup.bandwichpersistencedebugging.models.users.contact_infos;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * Contains values that determines address attributes.
  */
+@NoArgsConstructor
 public class Address {
 
     /**

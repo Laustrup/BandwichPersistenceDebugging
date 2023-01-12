@@ -340,7 +340,7 @@ CREATE TABLE subscriptions(
         'PREMIUM_ARTIST') NOT NULL,
     /* Offer */
     offer_type ENUM('FREE_TRIAL',
-        'SALE') NOT NULL,
+        'SALE'),
     offer_expires DATETIME,
     offer_effect DOUBLE,
 

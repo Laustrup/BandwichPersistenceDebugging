@@ -112,6 +112,7 @@ public class UserAssembly extends Assembler {
         try {
             if (preInitiate)
                 set.next();
+
             switch (set.getString("users.kind")) {
                 case "BAND" -> user = BandAssembly.get_instance().assemble(set, isTemplate);
                 case "ARTIST" -> user = ArtistAssembly.get_instance().assemble(set,isTemplate);

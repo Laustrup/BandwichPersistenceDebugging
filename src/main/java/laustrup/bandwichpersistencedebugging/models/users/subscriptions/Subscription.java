@@ -6,16 +6,17 @@ import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Artist
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.bands.Band;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-//TODO Insert when User is inserted in database.
 /**
  * Defines the kind of subscription a user is having.
  * Only Artists and Bands can have a paying subscription.
  */
+@NoArgsConstructor
 public class Subscription extends Model {
 
     /**
@@ -148,7 +149,7 @@ public class Subscription extends Model {
     public double get_price() {
         if (_user != null &&
                 ((_user.getClass() == Band.class || _user.getClass() == Artist.class) &&
-                (_offer.get_type() != SubscriptionOffer.Type.FREE_TRIAL && !isOfferExpired())))
+                        (_offer != null && (_offer.get_type() != SubscriptionOffer.Type.FREE_TRIAL && !isOfferExpired()))))
             return isOfferExpired() ? _price : _price * _offer.get_effect();
         else return 0;
     }
@@ -158,7 +159,11 @@ public class Subscription extends Model {
      * Counts from LocalDateTime.now.
      * @return True if the moment now is after the date that the offer of this Subscription will expire, otherwise false.
      */
-    public boolean isOfferExpired() { return LocalDateTime.now().isAfter(_offer.get_expires()); }
+    public boolean isOfferExpired() {
+        if (_offer == null || _offer.get_expires() == null)
+            return true;
+        return LocalDateTime.now().isAfter(_offer.get_expires());
+    }
 
     @Override
     public String toString() {

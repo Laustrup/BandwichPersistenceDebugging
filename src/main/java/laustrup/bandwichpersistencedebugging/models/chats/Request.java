@@ -6,6 +6,7 @@ import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * Determines if a User have approved to be a part of the Event.
  */
-
+@NoArgsConstructor
 public class Request extends Model {
 
     /**

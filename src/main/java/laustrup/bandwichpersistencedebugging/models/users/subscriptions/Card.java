@@ -1,6 +1,7 @@
 package laustrup.bandwichpersistencedebugging.models.users.subscriptions;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -9,7 +10,7 @@ import java.util.InputMismatchException;
 /**
  * Contains different information about credit cards, that are needed for curtain subscriptions.
  */
-@ToString
+@NoArgsConstructor @ToString
 public class Card {
 
     /**

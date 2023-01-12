@@ -3,6 +3,7 @@ package laustrup.bandwichpersistencedebugging.models.users;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.util.InputMismatchException;
  * Is use for logging in a user.
  * Can check validations of email and password.
  */
-@ToString
+@NoArgsConstructor @ToString
 public class Login {
 
     /**
