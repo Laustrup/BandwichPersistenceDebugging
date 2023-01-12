@@ -59,9 +59,7 @@ public abstract class Model {
     public Model() {
         _timestamp = LocalDateTime.now();
     }
-    public Model(long id) throws InputMismatchException {
-        if (id == 0)
-            throw new InputMismatchException();
+    public Model(long id) {
         _primaryId = id;
         _timestamp = LocalDateTime.now();
     }
@@ -71,25 +69,19 @@ public abstract class Model {
         _timestamp = LocalDateTime.now();
     }
 
-    public Model(long id, String title, LocalDateTime timestamp) throws InputMismatchException {
-        if (id == 0)
-            throw new InputMismatchException();
+    public Model(long id, String title, LocalDateTime timestamp) {
         _primaryId = id;
         _title = title;
         _timestamp = timestamp;
     }
-    public Model(long primaryId, long secondaryId, String title) throws InputMismatchException {
-        if (primaryId == 0)
-            throw new InputMismatchException();
+    public Model(long primaryId, long secondaryId, String title) {
         _primaryId = primaryId;
         _secondaryId = secondaryId;
         _title = title;
         _timestamp = LocalDateTime.now();
     }
 
-    public Model(long primaryId, long secondaryId, String title, LocalDateTime timestamp) throws InputMismatchException {
-        if (primaryId == 0)
-            throw new InputMismatchException();
+    public Model(long primaryId, long secondaryId, String title, LocalDateTime timestamp) {
         _primaryId = primaryId;
         _secondaryId = secondaryId;
         _title = title;

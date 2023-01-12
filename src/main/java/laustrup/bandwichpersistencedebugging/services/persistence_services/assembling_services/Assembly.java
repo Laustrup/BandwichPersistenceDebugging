@@ -196,7 +196,9 @@ public class Assembly extends Assembler {
      * @param id The id of the Event that is wished to be assembled.
      * @return The assembled Event.
      */
-    public Event getEvent(long id) { return assembling(EventAssembly.get_instance().assemble(id), true); }
+    public Event getEvent(long id) {
+        return assembling(EventAssembly.get_instance().assemble(id), true);
+    }
 
     /**
      * Gets an Event object with the informations given from the EventRepository.
@@ -232,6 +234,8 @@ public class Assembly extends Assembler {
      * @return The assembled Event.
      */
     private Event assembling(Event event, boolean willFinish) {
+
+        /*
         event.set_venue((Venue) getUser(event.get_venue().get_primaryId()));
 
         event.set_gigs(_describer.describeGigs(event.get_gigs()));
@@ -246,7 +250,8 @@ public class Assembly extends Assembler {
         for (int i = 1; i <= event.get_requests().size(); i++)
             event.get_requests().set(i, requests.get(i));
         event.set_requestEvents();
-
+        */
+        _describer.describeEvents(new Liszt<>(new Event[]{event}));
 
         if (willFinish)
             return finish(event);

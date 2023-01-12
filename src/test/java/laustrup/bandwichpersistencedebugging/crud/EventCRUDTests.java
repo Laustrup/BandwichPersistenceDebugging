@@ -4,6 +4,7 @@ import laustrup.bandwichpersistencedebugging.JTest;
 import laustrup.bandwichpersistencedebugging.models.chats.messages.Bulletin;
 import laustrup.bandwichpersistencedebugging.models.events.Event;
 import laustrup.bandwichpersistencedebugging.models.events.Participation;
+import laustrup.bandwichpersistencedebugging.models.users.User;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.assembling_services.Assembly;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.entity_services.sub_entity_services.EventPersistenceService;
@@ -90,17 +91,29 @@ public class EventCRUDTests extends JTest {
         assertTrue(delete(actual == null ? expected : actual));
     }
 
-    private Event read(Event event) {
+    @ParameterizedTest
+    @CsvSource(value = {"1","2"})
+    void canAssembleEvent(long id) {
+        //ACT
         begin();
-        event = Assembly.get_instance().getEvent(event.get_primaryId());
-        calculatePerformance("read event");
-        return event;
+        Event actual = Assembly.get_instance().getEvent(id);
+        calculatePerformance();
+
+        //ASSERT
+        assertNotNull(actual);
     }
 
     private Event update(Event event) {
         begin();
         event = EventPersistenceService.get_instance().update(event);
         calculatePerformance("update event");
+        return event;
+    }
+
+    private Event read(Event event) {
+        begin();
+        event = Assembly.get_instance().getEvent(event.get_primaryId());
+        calculatePerformance("read event");
         return event;
     }
 

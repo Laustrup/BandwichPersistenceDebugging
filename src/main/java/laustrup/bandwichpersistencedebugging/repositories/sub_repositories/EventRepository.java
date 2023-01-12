@@ -46,7 +46,7 @@ public class EventRepository extends Repository {
         StringBuilder where = new StringBuilder("WHERE ");
 
         for (int i = 1; i <= ids.size(); i++) {
-            where.append("event_id.id = ").append(ids.get(i));
+            where.append("event_id = ").append(ids.get(i));
             if (i < ids.size())
                 where.append(" OR ");
         }

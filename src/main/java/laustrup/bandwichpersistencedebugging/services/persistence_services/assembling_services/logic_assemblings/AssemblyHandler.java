@@ -169,7 +169,7 @@ public class AssemblyHandler {
                     Participation.ParticipationType.valueOf(set.getString(table+".type"))
             );
 
-            if (!participations.contains(participation))
+            if (!participations.contains(participation.toString()))
                 participations.add(participation);
         }
 

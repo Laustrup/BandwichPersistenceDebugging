@@ -59,7 +59,7 @@ public class Mail extends Message {
                     "timestamp:" + _timestamp;
         else
             return "Mail(id:" + _primaryId +
-                    "ChatRoom:" + _chatRoom. toString() +
+                    "ChatRoom:" + (_chatRoom != null ? _chatRoom. toString() : null) +
                     "author:" + _author.toString() +
                     "content:" + _content +
                     "isSent:" + _sent +

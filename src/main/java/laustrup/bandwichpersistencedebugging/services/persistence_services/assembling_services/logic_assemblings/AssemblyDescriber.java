@@ -94,21 +94,23 @@ public class AssemblyDescriber {
      * @return The described Events.
      */
     public Liszt<Event> describeEvents(Liszt<Event> events) {
-        _ids = new Liszt<>();
-        for (Event event : events)
-            _ids.add(event.get_primaryId());
+        if (events != null) {
+            _ids = new Liszt<>();
+            for (Event event : events)
+                _ids.add(event.get_primaryId());
 
-        events = new Liszt<>();
-        ResultSet set = EventRepository.get_instance().get(_ids);
+            events = new Liszt<>();
+            ResultSet set = EventRepository.get_instance().get(_ids);
 
-        if (set != null) {
-            for (long id : _ids) {
-                try {
-                    if (set.isBeforeFirst())
-                        set.next();
-                    events.add(EventAssembly.get_instance().assemble(set, false));
-                } catch (SQLException e) {
-                    Printer.get_instance().print("Couldn't describe Events...", e);
+            if (set != null) {
+                for (long id : _ids) {
+                    try {
+                        if (set.isBeforeFirst())
+                            set.next();
+                        events.add(EventAssembly.get_instance().assemble(set, false));
+                    } catch (SQLException e) {
+                        Printer.get_instance().print("Couldn't describe Events...", e);
+                    }
                 }
             }
         }
@@ -210,8 +212,8 @@ public class AssemblyDescriber {
             for (int j = 0; j < gigs.get(i).get_act().length; j++) {
                 performers = new Performer[gigs.get(i).get_act().length];
                 for (User user : users) {
-                    if (user.get_primaryId() == gigs.get(i).get_act()[i].get_primaryId()) {
-                        performers[i] = (Performer) user;
+                    if (user.get_primaryId() == gigs.get(i).get_act()[i-1].get_primaryId()) {
+                        performers[i-1] = (Performer) user;
                         break;
                     }
                 }

@@ -159,7 +159,7 @@ public class Participant extends User {
 
     @Override
     public String toString() {
-        return "Artist(" +
+        return "Participant(" +
                     "id=" + _primaryId +
                     ",username=" + _username +
                     ",description=" + _description +

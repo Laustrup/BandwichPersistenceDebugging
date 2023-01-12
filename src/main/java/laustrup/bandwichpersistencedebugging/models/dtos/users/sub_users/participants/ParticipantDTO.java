@@ -25,12 +25,15 @@ public class ParticipantDTO extends UserDTO {
 
     public ParticipantDTO(Participant participant) {
         super(participant.get_primaryId(), participant.get_username(), participant.get_firstName(), participant.get_lastName(),
-                new ContactInfoDTO(participant.get_contactInfo()), participant.get_albums(), participant.get_ratings(),
-                participant.get_events(), participant.get_chatRooms(), new SubscriptionDTO(participant.get_subscription()),
+                participant.get_contactInfo() != null ? new ContactInfoDTO(participant.get_contactInfo()) : null,
+                participant.get_albums(), participant.get_ratings(), participant.get_events(), participant.get_chatRooms(),
+                participant.get_subscription() != null ? new SubscriptionDTO(participant.get_subscription()) : null,
                 participant.get_bulletins(), participant.get_authority(), participant.get_timestamp());
-        idols = new UserDTO[participant.get_idols().size()];
-        for (int i = 0; i < idols.length; i++)
-            idols[i] = DTOService.get_instance().convertToDTO(participant.get_idols().get(i+1));
+        if (idols != null) {
+            idols = new UserDTO[participant.get_idols().size()];
+            for (int i = 0; i < idols.length; i++)
+                idols[i] = DTOService.get_instance().convertToDTO(participant.get_idols().get(i+1));
+        }
     }
 
     public ParticipantDTO(User user) {

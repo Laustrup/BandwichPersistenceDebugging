@@ -15,6 +15,7 @@ import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
+import java.beans.EventHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -44,7 +45,9 @@ public class EventAssembly extends Assembler {
      * @param id The id of the Event that is wished to be assembled.
      * @return The assembled Event.
      */
-    public Event assemble(long id) { return assemble(EventRepository.get_instance().get(id),true); }
+    public Event assemble(long id) {
+        return assemble(EventRepository.get_instance().get(id),true);
+    }
 
     /**
      * Builds all Event objects with the informations given from the EventRepository.
@@ -109,29 +112,35 @@ public class EventAssembly extends Assembler {
     }
 
     public Event assemble(ResultSet set) throws SQLException {
-        long id = set.getLong("`events`.id");
-        String title = set.getString("`events`.title"),
-            description = set.getString("`events`.`description`");
-        LocalDateTime openDoors = set.getTimestamp("`events`.open_doors").toLocalDateTime();
-        Plato isVoluntary = new Plato(Plato.Argument.valueOf(set.getString("`events`.is_voluntary"))),
-            isPublic = new Plato(Plato.Argument.valueOf(set.getString("`events`.is_public"))),
-            isCancelled = new Plato(Plato.Argument.valueOf(set.getString("`events`.is_cancelled"))),
-            isSoldOut = new Plato(Plato.Argument.valueOf(set.getString("`events`.is_sold_out")));
-        String location = set.getString("`events`.location");
-        double price = set.getDouble("`events`.price");
-        String ticketsURL = set.getString("`events`.tickets_url");
+        long id = set.getLong("events.id");
+        String title = set.getString("events.title"),
+            description = set.getString("events.description");
+        LocalDateTime openDoors = set.getTimestamp("events.open_doors") != null ?
+                set.getTimestamp("events.open_doors").toLocalDateTime() : null;
+        Plato isVoluntary = set.getString("events.is_voluntary") != null ?
+                new Plato(Plato.Argument.valueOf(set.getString("events.is_voluntary"))) : null,
+            isPublic = set.getString("events.is_public") != null ?
+                    new Plato(Plato.Argument.valueOf(set.getString("events.is_public"))) : null,
+            isCancelled = set.getString("events.is_cancelled") != null ?
+                    new Plato(Plato.Argument.valueOf(set.getString("events.is_cancelled"))) : null,
+            isSoldOut = set.getString("events.is_sold_out") != null ?
+                    new Plato(Plato.Argument.valueOf(set.getString("events.is_sold_out"))) : null;
+        String location = set.getString("events.location");
+        double price = set.getDouble("events.price");
+        String ticketsURL = set.getString("events.tickets_url");
         ContactInfo contactInfo = ModelAssembly.get_instance().assembleContactInfo(set);
         Liszt<Gig> gigs = new Liszt<>();
-        Venue venue = new Venue(set.getLong("`events`.venue_id"));
+        Venue venue = new Venue(set.getLong("events.venue_id"));
         Liszt<Request> requests = new Liszt<>();
         Liszt<Participation> participations = new Liszt<>();
         Liszt<Bulletin> bulletins = new Liszt<>();
         Liszt<Album> albums = new Liszt<>();
-        LocalDateTime timestamp = set.getTimestamp("`events`.`timestamp`").toLocalDateTime();
+        LocalDateTime timestamp = set.getTimestamp("events.timestamp") != null ?
+                set.getTimestamp("events.timestamp").toLocalDateTime() : null;
 
         try {
             do {
-                if (id != set.getLong("`events`.id"))
+                if (id != set.getLong("events.id"))
                     break;
 
                 gigs = _handler.handleGigs(set, gigs);

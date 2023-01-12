@@ -199,7 +199,7 @@ public class TestItems extends JTest {
 
         for (int i = 0; i < _albums.length; i++)
             _albums[i] = new Album(i+1, "Album title",generateAlbumItems(),
-                    new Participant(), LocalDateTime.now());
+                    new Participant(0), LocalDateTime.now());
     }
 
     public Liszt<AlbumItem> generateAlbumItems() {
@@ -223,7 +223,7 @@ public class TestItems extends JTest {
         _ratings = new Rating[_ratingAmount];
 
         for (int i = 0; i < _ratings.length; i++)
-            _ratings[i] = new Rating(_random.nextInt(5)+1,new Band(), new Participant());
+            _ratings[i] = new Rating(_random.nextInt(5)+1,new Band(0), new Participant(0));
     }
 
     private void setupParticipants() {
@@ -252,7 +252,7 @@ public class TestItems extends JTest {
             _artists[i] = new Artist(id, gender ? "Hansinator "+id : "Ursulanator "+id,
                     gender ? "Hans "+id : "Ursula "+id, "Hansen "+id, "Description "+id,
                     _contactInfo[_random.nextInt(_contactInfo.length)], new Liszt<>(new Album[]{_albums[_random.nextInt(_albums.length)]}),
-                    randomizeRatings(), new Liszt<>(), new Liszt<>(), new Liszt<>(), setupSubscription(new Artist()), new Liszt<>(),
+                    randomizeRatings(), new Liszt<>(), new Liszt<>(), new Liszt<>(), setupSubscription(new Artist(0)), new Liszt<>(),
                     new Liszt<>(), "Gear "+id, new Liszt<>(), new Liszt<>(), new Liszt<>(), LocalDateTime.now());
         }
     }
@@ -290,7 +290,7 @@ public class TestItems extends JTest {
 
             _bands[i] = new Band(id, "Band "+id, "Description "+id,
                     _contactInfo[_random.nextInt(_contactInfo.length)], new Liszt<>(new Album[]{_albums[_random.nextInt(_albums.length)]}),
-                    randomizeRatings(), new Liszt<>(), new Liszt<>(), new Liszt<>(), setupSubscription(new Band()), new Liszt<>(),
+                    randomizeRatings(), new Liszt<>(), new Liszt<>(), new Liszt<>(), setupSubscription(new Band(0)), new Liszt<>(),
                     members, "Gear "+id,fans, new Liszt<>(), LocalDateTime.now());
 
             for (Artist member : _bands[i].get_members()) _artists[(int) (member.get_primaryId()-1)].addBand(_bands[i]);
@@ -503,7 +503,7 @@ public class TestItems extends JTest {
 
             for (int j = 0; j < contentAmount; j++) content += "Test ";
 
-            mails.add(new Mail(i+1, new ChatRoom(), members.get(_random.nextInt(members.size())+1),
+            mails.add(new Mail(i+1, null, members.get(_random.nextInt(members.size())+1),
                     content, _random.nextBoolean(), generatePlato(), _random.nextBoolean(), LocalDateTime.now()));
         }
 

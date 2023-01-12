@@ -3,31 +3,34 @@ package laustrup.bandwichpersistencedebugging.models.events;
 import laustrup.bandwichpersistencedebugging.models.Model;
 import laustrup.bandwichpersistencedebugging.models.dtos.events.ParticipationDTO;
 import laustrup.bandwichpersistencedebugging.models.users.sub_users.participants.Participant;
-
 import laustrup.bandwichpersistencedebugging.services.DTOService;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 /**
  * Determines type of which a Participant is participating in an Event.
  */
-@Data
 public class Participation extends Model {
 
     /**
      * The Participant of the participation.
      */
+    @Getter
     private Participant _participant;
 
     /**
      * The Event of the participation.
      */
+    @Getter
     private Event _event;
 
     /**
      * The type of which participant is participating in the participation.
      */
+    @Getter @Setter
     private ParticipationType _type;
 
     public Participation(ParticipationDTO participation) {
@@ -67,7 +70,6 @@ public class Participation extends Model {
                     ",secondaryId:" + _secondaryId +
                     ",title:" + _title +
                     ",type:" + _type +
-                    ",timestamp:" + _timestamp +
                 ")";
     }
 

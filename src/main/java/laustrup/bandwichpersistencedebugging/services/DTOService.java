@@ -57,7 +57,7 @@ public class DTOService {
     }
 
     public UserDTO convertToDTO(User user) {
-        if (user == null)
+        if (user == null || user.get_authority() == null)
             return null;
         switch (user.get_authority()) {
             case VENUE -> { return new VenueDTO(user); }
