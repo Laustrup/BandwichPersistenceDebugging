@@ -96,7 +96,7 @@ public class Request extends Model {
 
     @Override
     public String toString() {
-        return "AlbumItem(" +
+        return "Request(" +
                     "primaryId:" + _primaryId +
                     ",secondaryId:" + _secondaryId +
                     ",approved:" + _approved.get_argument() +

@@ -42,9 +42,7 @@ public abstract class ModelDTO {
     public ModelDTO() {
         timestamp = LocalDateTime.now();
     }
-    public ModelDTO(long id) throws InputMismatchException {
-        if (id == 0)
-            throw new InputMismatchException();
+    public ModelDTO(long id) {
         primaryId = id;
         timestamp = LocalDateTime.now();
     }
@@ -54,25 +52,19 @@ public abstract class ModelDTO {
         timestamp = LocalDateTime.now();
     }
 
-    public ModelDTO(long id, String title, LocalDateTime timestamp) throws InputMismatchException {
-        if (id == 0)
-            throw new InputMismatchException();
+    public ModelDTO(long id, String title, LocalDateTime timestamp) {
         primaryId = id;
         this.title = title;
         this.timestamp = timestamp;
     }
-    public ModelDTO(long primaryId, long secondaryId, String title) throws InputMismatchException {
-        if (primaryId == 0)
-            throw new InputMismatchException();
+    public ModelDTO(long primaryId, long secondaryId, String title) {
         this.primaryId = primaryId;
         this.secondaryId = secondaryId;
         this.title = title;
         timestamp = LocalDateTime.now();
     }
 
-    public ModelDTO(long primaryId, long secondaryId, String title, LocalDateTime timestamp) throws InputMismatchException {
-        if (primaryId == 0)
-            throw new InputMismatchException();
+    public ModelDTO(long primaryId, long secondaryId, String title, LocalDateTime timestamp) {
         this.primaryId = primaryId;
         this.secondaryId = secondaryId;
         this.title = title;

@@ -121,11 +121,16 @@ public class Venue extends User {
      * Will only be done, if it is under assembling.
      * @return The Requests of this Artist.
      */
-    public Liszt<Request> set_requestUsers() {
+    public Venue set_requestUsers() {
+        Liszt<Request> requests = _requests;
+        _requests = null;
+
         if (_assembling)
-            for (int i = 1; i <= _requests.size(); i++)
-                _requests.get(i).set_user(this);
-        return _requests;
+            for (int i = 1; i <= requests.size(); i++)
+                requests.get(i).set_user(this);
+
+        _requests = requests;
+        return this;
     }
 
     /**

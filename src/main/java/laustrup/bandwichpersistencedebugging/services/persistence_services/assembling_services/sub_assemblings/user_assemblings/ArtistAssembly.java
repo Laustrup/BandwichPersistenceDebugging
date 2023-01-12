@@ -70,27 +70,29 @@ public class ArtistAssembly extends UserAssembler {
         Liszt<Request> requests = new Liszt<>();
         Liszt<Long> bandIds = new Liszt<>();
 
-        do {
-            if (_id != set.getLong("users.id"))
-                break;
+        if (!isTemplate) {
+            do {
+                if (_id != set.getLong("users.id"))
+                    break;
 
-            _albums = _handler.handleAlbums(set, _albums);
-            _ratings = _handler.handleRatings(set, _ratings);
-            gigs = _handler.handleGigs(set, gigs);
-            _events = _handler.handleEvents(set, _events);
-            _chatRooms = _handler.handleChatRooms(set, _chatRooms);
-            _bulletins = _handler.handleBulletins(set, _bulletins, false);
+                _albums = _handler.handleAlbums(set, _albums);
+                _ratings = _handler.handleRatings(set, _ratings);
+                gigs = _handler.handleGigs(set, gigs);
+                _events = _handler.handleEvents(set, _events);
+                _chatRooms = _handler.handleChatRooms(set, _chatRooms);
+                _bulletins = _handler.handleBulletins(set, _bulletins, false);
 
-            if (set.getLong("followings.idol_id") == _id)
-                fans = _handler.handleFans(set, fans);
-            else
-                idols = _handler.handleIdols(set, idols);
+                if (set.getLong("followings.idol_id") == _id)
+                    fans = _handler.handleFans(set, fans);
+                else
+                    idols = _handler.handleIdols(set, idols);
 
-            requests = _handler.handleRequests(set, requests, new Artist(_id));
+                requests = _handler.handleRequests(set, requests, new Artist(_id));
 
-            if (!bandIds.contains(set.getLong("band_members.band_id")))
-                bandIds.add(set.getLong("band_members.band_id"));
-        } while (set.next());
+                if (!bandIds.contains(set.getLong("band_members.band_id")))
+                    bandIds.add(set.getLong("band_members.band_id"));
+            } while (set.next());
+        }
 
         Artist artist = new Artist(_id, _username, _firstName, _lastName, _description, _contactInfo, _albums, _ratings, _events, gigs,
                 _chatRooms, _subscription, _bulletins,

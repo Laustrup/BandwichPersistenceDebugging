@@ -138,37 +138,47 @@ public class EventDTO extends ModelDTO {
 
         description = event.get_description();
 
-        gigs = new GigDTO[event.get_gigs().size()];
-        for (int i = 0; i < gigs.length; i++)
-            gigs[i] = new GigDTO(event.get_gigs().get(i+1));
+        if (event.get_gigs() != null) {
+            gigs = new GigDTO[event.get_gigs().size()];
+            for (int i = 0; i < gigs.length; i++)
+                gigs[i] = new GigDTO(event.get_gigs().get(i+1));
+        }
 
         openDoors = event.get_openDoors();
         start = event.get_start();
         end = event.get_end();
         length = event.get_length();
 
-        isVoluntary = event.get_voluntary().get_argument();
-        isPublic = event.get_public().get_argument();
-        isCancelled = event.get_cancelled().get_argument();
-        isSoldOut = event.get_soldOut().get_argument();
+        isVoluntary = event.get_voluntary() != null ? event.get_voluntary().get_argument() : null;
+        isPublic = event.get_public() != null ? event.get_public().get_argument() : null;
+        isCancelled = event.get_cancelled() != null ? event.get_cancelled().get_argument() : null;
+        isSoldOut = event.get_soldOut() != null ? event.get_soldOut().get_argument() : null;
         price = event.get_price();
         ticketsURL = event.get_ticketsURL();
-        contactInfo = new ContactInfoDTO(event.get_contactInfo());
+        contactInfo = event.get_contactInfo() != null ? new ContactInfoDTO(event.get_contactInfo()) : null;
         venue = (VenueDTO) DTOService.get_instance().convertToDTO(event.get_venue());
 
         location = event.get_location();
 
-        requests = new RequestDTO[event.get_requests().size()];
-        for (int i = 0; i < requests.length; i++)
-            requests[i] = new RequestDTO(event.get_requests().get(i+1));
-        participations = new ParticipationDTO[event.get_participations().size()];
-        for (int i = 0; i < participations.length; i++)
-            participations[i] = new ParticipationDTO(event.get_participations().get(i+1));
-        bulletins = new BulletinDTO[event.get_bulletins().size()];
-        for (int i = 0; i < bulletins.length; i++)
-            bulletins[i] = new BulletinDTO(event.get_bulletins().get(i+1));
-        albums = new AlbumDTO[event.get_albums().size()];
-        for (int i = 0; i < albums.length; i++)
-            albums[i] = new AlbumDTO(event.get_albums().get(i+1));
+        if (event.get_requests() != null) {
+            requests = new RequestDTO[event.get_requests().size()];
+            for (int i = 0; i < requests.length; i++)
+                requests[i] = new RequestDTO(event.get_requests().get(i+1));
+        }
+        if (event.get_participations() != null) {
+            participations = new ParticipationDTO[event.get_participations().size()];
+            for (int i = 0; i < participations.length; i++)
+                participations[i] = new ParticipationDTO(event.get_participations().get(i+1));
+        }
+        if (event.get_bulletins() != null) {
+            bulletins = new BulletinDTO[event.get_bulletins().size()];
+            for (int i = 0; i < bulletins.length; i++)
+                bulletins[i] = new BulletinDTO(event.get_bulletins().get(i+1));
+        }
+        if (event.get_albums() != null) {
+            albums = new AlbumDTO[event.get_albums().size()];
+            for (int i = 0; i < albums.length; i++)
+                albums[i] = new AlbumDTO(event.get_albums().get(i+1));
+        }
     }
 }

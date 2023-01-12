@@ -70,26 +70,28 @@ public class BandAssembly extends UserAssembler {
         Liszt<User> fans = new Liszt<>();
         Liszt<User> idols = new Liszt<>();
 
-        do {
-            if (_id != set.getLong("users.id"))
-                break;
+        if (!isTemplate) {
+            do {
+                if (_id != set.getLong("users.id"))
+                    break;
 
-            _albums = _handler.handleAlbums(set, _albums);
-            _ratings = _handler.handleRatings(set, _ratings);
-            gigs = _handler.handleGigs(set, gigs);
-            _events = _handler.handleEvents(set, _events);
-            _chatRooms = _handler.handleChatRooms(set, _chatRooms);
-            _bulletins = _handler.handleBulletins(set, _bulletins, false);
+                _albums = _handler.handleAlbums(set, _albums);
+                _ratings = _handler.handleRatings(set, _ratings);
+                gigs = _handler.handleGigs(set, gigs);
+                _events = _handler.handleEvents(set, _events);
+                _chatRooms = _handler.handleChatRooms(set, _chatRooms);
+                _bulletins = _handler.handleBulletins(set, _bulletins, false);
 
-            if (set.getLong("followings.idol_id") == _id)
-                fans = _handler.handleFans(set, fans);
-            else
-                idols = _handler.handleIdols(set, idols);
+                if (set.getLong("followings.idol_id") == _id)
+                    fans = _handler.handleFans(set, fans);
+                else
+                    idols = _handler.handleIdols(set, idols);
 
-            if (!memberIds.contains(set.getLong("band_members.artist_id")))
-                memberIds.add(set.getLong("band_members.artist_id"));
+                if (!memberIds.contains(set.getLong("band_members.artist_id")))
+                    memberIds.add(set.getLong("band_members.artist_id"));
 
-        } while (set.next());
+            } while (set.next());
+        }
 
         try {
             Band band = new Band(_id, _username, _description, _contactInfo, _albums, _ratings, _events, gigs, _chatRooms,

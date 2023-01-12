@@ -246,7 +246,7 @@ public class AssemblyHandler {
     public Liszt<Request> handleRequests(ResultSet set, Liszt<Request> requests, User user) throws SQLException {
         String table = "requests";
 
-        if (set.getLong(table+".event_id") > 0) {
+        if (set.getLong(table+".event_id") > 0 && set.getLong(table+".user_id") > 0) {
             Request request = new Request(user, new Event(set.getLong(table+".event_id")),
                     convertPlatoFromDatabase(set,table+".is_approved"),
                     set.getString(table+".message"),

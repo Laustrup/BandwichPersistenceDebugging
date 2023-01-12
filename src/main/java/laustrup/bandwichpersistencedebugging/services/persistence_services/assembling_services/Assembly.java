@@ -167,11 +167,11 @@ public class Assembly extends Assembler {
                         ((Venue) user).get_requests().set(i, requests.get(i));
                 }
                 if (user.getClass() == Artist.class) {
-                    ((Artist) user).set_requestUsers();
+                    //user = ((Artist) user).set_requestUsers();
                     for (int i = 1; i <= requests.size(); i++)
                         ((Artist) user).get_requests().get(i).doneAssembling();
                 } else {
-                    ((Venue) user).set_requestUsers();
+                    //user = ((Venue) user).set_requestUsers();
                     for (int i = 1; i <= requests.size(); i++)
                         ((Venue) user).get_requests().get(i).doneAssembling();
                 }

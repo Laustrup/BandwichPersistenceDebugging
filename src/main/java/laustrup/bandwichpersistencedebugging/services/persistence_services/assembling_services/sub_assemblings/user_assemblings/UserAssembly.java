@@ -116,8 +116,8 @@ public class UserAssembly extends Assembler {
             switch (set.getString("users.kind")) {
                 case "BAND" -> user = BandAssembly.get_instance().assemble(set, isTemplate);
                 case "ARTIST" -> user = ArtistAssembly.get_instance().assemble(set,isTemplate);
-                case "VENUE" -> user = VenueAssembly.get_instance().assemble(set);
-                case "PARTICIPANT" -> user = ParticipantAssembly.get_instance().assemble(set);
+                case "VENUE" -> user = VenueAssembly.get_instance().assemble(set,isTemplate);
+                case "PARTICIPANT" -> user = ParticipantAssembly.get_instance().assemble(set,isTemplate);
             }
         } catch (SQLException e) {
             Printer.get_instance().print("Trouble assembling user...", e);

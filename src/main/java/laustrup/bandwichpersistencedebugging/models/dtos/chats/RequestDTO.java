@@ -37,8 +37,8 @@ public class RequestDTO extends ModelDTO {
     private String message;
 
     public RequestDTO(Request request) {
-        super(request.get_user().get_primaryId(), request.get_event().get_primaryId(),
-                "Request of " + request.get_user().get_username() + " to " + request.get_event().get_title(),
+        super(request.get_secondaryId(), request.get_secondaryId(),
+                "Request of " + request.get_primaryId() + " to " + request.get_secondaryId(),
                 request.get_timestamp());
         user = DTOService.get_instance().convertToDTO(request.get_user());
         event = new EventDTO(request.get_event());
