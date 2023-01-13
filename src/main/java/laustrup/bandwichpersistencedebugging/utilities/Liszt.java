@@ -337,7 +337,7 @@ public class Liszt<E> implements List<E>, ILiszt<E> {
 
     @Override
     public E get(int index) {
-        if (index <= 0)
+        if (index <= 0 || isEmpty())
             return null;
         return _data[index-1];
     }

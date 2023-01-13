@@ -349,7 +349,7 @@ public class ModelRepository extends Repository {
                     rating.get_judge().get_primaryId() + "," +
                     rating.get_value() + "," +
                 "NOW()) " +
-                "ON DUPLICATE KEY " +
+                "ON DUPLICATE KEY UPDATE " +
                     "`value` = " + rating.get_value() +
                 ";", false);
     }
@@ -361,12 +361,12 @@ public class ModelRepository extends Repository {
      * In case it did insert, it will generate a key.
      * Will not close connection.
      * @param album The Album with its items that will have influence on the database table.
-     * @return A ResultSet with a generated key.
+     * @return The generated key of Album.
      */
-    public ResultSet upsert(Album album) {
+    public long upsert(Album album) {
         try {
             boolean idExists = album.get_primaryId() > 0;
-            return create("INSERT INTO albums(" +
+            ResultSet set =  create("INSERT INTO albums(" +
                         (idExists ? "id," : "") +
                         "title," +
                         "author_id," +
@@ -379,12 +379,17 @@ public class ModelRepository extends Repository {
                     "NOW()) " +
                     "ON DUPLICATE KEY UPDATE " +
                         "title = '" + album.get_title() + "' " +
-                    "; " +
-                    upsertAlbumItemsSql(album)).getGeneratedKeys();
+                    "; ").getGeneratedKeys();
+            set.next();
+            long id = set.getLong(1);
+
+            edit(upsertAlbumItemsSql(album),false);
+
+            return id;
         } catch (SQLException e) {
             Printer.get_instance().print("Couldn't upsert Album " + album.get_title() + "...",e);
         }
-        return null;
+        return 0;
     }
 
     /**
@@ -397,19 +402,20 @@ public class ModelRepository extends Repository {
     private String upsertAlbumItemsSql(Album album) {
         String sql = "";
         for (AlbumItem item : album.get_items())
-            sql += "INSERT IGNORE INTO album_endpoints(" +
+            sql += "INSERT IGNORE INTO album_items(" +
                         "title," +
                         "endpoint," +
                         "kind," +
                         "album_id," +
-                        "event_id" +
+                        (item.get_event() != null ? "event_id," : "") +
+                        "timestamp" +
                     ") VALUES('" +
                         item.get_title() + "','" +
                         item.get_endpoint() + "','" +
                         item.get_kind() + "'," +
                         album.get_primaryId() + "," +
-                        item.get_event().get_primaryId() +
-                    "); " +
+                        (item.get_event() != null ? item.get_event().get_primaryId() + "," : "") +
+                    "NOW()); " +
                         upsertTags(item);
         return sql;
     }

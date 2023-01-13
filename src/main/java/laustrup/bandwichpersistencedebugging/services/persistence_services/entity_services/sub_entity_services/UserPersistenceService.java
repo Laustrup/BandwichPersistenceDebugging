@@ -125,11 +125,8 @@ public class UserPersistenceService {
      * @return The author from the database.
      */
     public User upsert(Album album) {
-        ResultSet set = ModelRepository.get_instance().upsert(album);
-        if (set != null)
-            return Assembly.get_instance().getUser(album.get_author().get_primaryId());
-
-        return null;
+        ModelRepository.get_instance().upsert(album);
+        return Assembly.get_instance().getUser(album.get_author().get_primaryId());
     }
 
     /**
