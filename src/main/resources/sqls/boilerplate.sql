@@ -54,6 +54,7 @@ CREATE TABLE users(
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL,
     `password` VARCHAR(30) NOT NULL,
+    email VARCHAR(30),
     first_name VARCHAR(20),
     last_name VARCHAR(40),
     `description` VARCHAR(500),
@@ -62,9 +63,12 @@ CREATE TABLE users(
         'ARTIST',
         'VENUE',
         'PARTICIPANT') NOT NULL,
-    
+
     PRIMARY KEY(id)
 );
+
+ALTER TABLE users ADD UNIQUE unique_username(username,`password`);
+ALTER TABLE users ADD UNIQUE unique_email(email,`password`);
 
 CREATE TABLE band_members(
     artist_id BIGINT(20) NOT NULL,
@@ -352,7 +356,6 @@ CREATE TABLE subscriptions(
 
 CREATE TABLE contact_informations(
     user_id BIGINT(20) NOT NULL,
-    email VARCHAR(30),
     /* Phone */
     first_digits INT(3),
     phone_number INT(10),

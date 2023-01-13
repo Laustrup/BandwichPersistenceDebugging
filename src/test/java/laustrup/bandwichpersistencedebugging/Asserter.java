@@ -303,11 +303,12 @@ public class Asserter {
      * @param actuals The Events that are the result of an action.
      */
     private void assertEvents(Liszt<Event> expectations, Liszt<Event> actuals) {
-        if (expectations.size() == actuals.size())
-            for (int i = 1; i <= expectations.size(); i++)
-                asserting(expectations.get(i),actuals.get(i));
-        else
-            fail();
+        if (expectations != null && actuals != null)
+            if (expectations.size() == actuals.size())
+                for (int i = 1; i <= expectations.size(); i++)
+                    asserting(expectations.get(i),actuals.get(i));
+            else
+                fail();
     }
 
     /**

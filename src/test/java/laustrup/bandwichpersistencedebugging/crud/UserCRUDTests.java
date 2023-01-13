@@ -136,7 +136,7 @@ class UserCRUDTests extends JTest {
         User expected = Assembly.get_instance().getUser(1);
         String prevDescription = expected.get_description(),
             postDescription = "This is a new description",
-            password = "laust_er_sej1";
+            password = RandomCreatorService.get_instance().generatePassword();
 
         //ACT
         expected.set_description(postDescription);
@@ -165,7 +165,7 @@ class UserCRUDTests extends JTest {
     void canUpsertSubscription() {
         //ARRANGE
         User expected = Assembly.get_instance().getUser(1);
-        String password = "laust_er_sej1";
+        String password = RandomCreatorService.get_instance().generatePassword();
         Subscription.Status prevStatus = expected.get_subscription().get_status(),
             postStatus = Subscription.Status.BLOCKED;
         expected.get_subscription().set_status(postStatus);
@@ -264,12 +264,12 @@ class UserCRUDTests extends JTest {
                                     new Subscription(expected, Subscription.Type.FREEMIUM, Subscription.Status.ACCEPTED,
                                             null, (long) 0,actual.get_subscription().get_timestamp()
                                     ),
-                                expected.get_bulletins(), expected.get_bands(), expected.get_runner(),
-                                expected.get_fans(),expected.get_idols(),expected.get_requests(),expected.get_timestamp()
+                                new Liszt<>(), new Liszt<>(), expected.get_runner(),
+                                new Liszt<>(),new Liszt<>(),new Liszt<>(),expected.get_timestamp()
                         ),
                 Subscription.Type.FREEMIUM, Subscription.Status.ACCEPTED, null, (long) 0,
-                actual.get_subscription().get_timestamp()),expected.get_bulletins(), expected.get_bands(),
-                expected.get_runner(), expected.get_fans(),expected.get_idols(),expected.get_requests(),
+                actual.get_subscription().get_timestamp()),new Liszt<>(), new Liszt<>(),
+                expected.get_runner(), new Liszt<>(),new Liszt<>(),new Liszt<>(),
                 actual.get_timestamp()
         );
 

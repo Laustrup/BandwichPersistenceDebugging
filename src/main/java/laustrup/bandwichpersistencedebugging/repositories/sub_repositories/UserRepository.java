@@ -59,10 +59,10 @@ public class UserRepository extends Repository {
      */
     public ResultSet get(Login login) {
         return login.usernameIsEmailKind() ?
-                get("WHERE contact_informations.email = " + login.get_username() +
-                        " AND users.`password` = " + login.get_password())
-                : get("WHERE users.username = " + login.get_username() +
-                        " AND users.`password` = " + login.get_password());
+                get("WHERE users.email = '" + login.get_username() +
+                        "' AND users.`password` = " + login.get_password() + "';")
+                : get("WHERE users.username = '" + login.get_username() +
+                        "' AND users.`password` = '" + login.get_password() + "';");
     }
 
     /**
@@ -165,7 +165,6 @@ public class UserRepository extends Repository {
                 "); " +
                 "INSERT INTO contact_informations(" +
                     "user_id," +
-                    "email," +
                     "first_digits," +
                     "phone_number," +
                     "phone_is_mobile," +
@@ -177,8 +176,7 @@ public class UserRepository extends Repository {
                     "country_indexes" +
                 ") " +
                 "VALUES (" +
-                    user.get_primaryId() + ",'" +
-                    user.get_contactInfo().get_email() + "'," +
+                    user.get_primaryId() + "," +
                     user.get_contactInfo().get_phone().get_country().get_firstPhoneNumberDigits() + "," +
                     user.get_contactInfo().get_phone().get_numbers() + "," +
                     user.get_contactInfo().get_phone().is_mobile() + ",'" +
@@ -258,10 +256,10 @@ public class UserRepository extends Repository {
     public boolean update(User user, Login login, String password) {
         return edit("UPDATE users SET " +
                     "username = '" + user.get_username() + "' " +
-                    "`password` = '" + password + "' " +
-                    "first_name = '" + user.get_firstName() + "' " +
-                    "last_name = '" + user.get_lastName() + "' " +
-                    "`description` = '" + user.get_description() + "' " +
+                    ",`password` = '" + password + "' " +
+                    ",first_name = '" + user.get_firstName() + "' " +
+                    ",last_name = '" + user.get_lastName() + "' " +
+                    ",`description` = '" + user.get_description() + "' " +
                 "WHERE " +
                     "id = " + user.get_primaryId() + " AND " +
                     "`password` = '" + login.get_password() +
@@ -276,7 +274,7 @@ public class UserRepository extends Repository {
 
     /**
      * Generates a SQL statement for updating contact informations such as
-     * email, first_digits, phone_number, phone_is_mobile, street, floor, postal
+     * first_digits, phone_number, phone_is_mobile, street, floor, postal
      * city, country_title, and country indexes.
      * @param user The User with the values to update in database.
      * @return The generated SQL statement.
@@ -284,7 +282,6 @@ public class UserRepository extends Repository {
     private String updateContactInfoSQL(User user) {
         ContactInfo info = user.get_contactInfo();
         return "UPDATE contact_informations SET " +
-                    "email = '" + info.get_email() + "', " +
                     "first_digits = " + info.get_country().get_firstPhoneNumberDigits() + ", " +
                     "phone_number = " + info.get_phone().get_numbers() + ", " +
                     "phone_is_mobile = " + info.get_phone().is_mobile() + ", " +
@@ -295,7 +292,11 @@ public class UserRepository extends Repository {
                     "country_title = '" + info.get_country().get_title() + "', " +
                     "country_indexes = '" + info.get_country().get_indexes() + "' " +
                 "WHERE " +
-                    "user_id = " + user.get_primaryId() + "; ";
+                    "user_id = " + user.get_primaryId() + "; " +
+                "UPDATE users SET " +
+                    "email = '" + info.get_email() + "' " +
+                "WHERE " +
+                    "users.id = " + user.get_primaryId() + "; ";
     }
 
     /**

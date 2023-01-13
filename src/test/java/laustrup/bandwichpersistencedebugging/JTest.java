@@ -2,6 +2,7 @@ package laustrup.bandwichpersistencedebugging;
 
 import laustrup.bandwichpersistencedebugging.models.chats.messages.Bulletin;
 import laustrup.bandwichpersistencedebugging.models.users.contact_infos.ContactInfo;
+import laustrup.bandwichpersistencedebugging.services.RandomCreatorService;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 import laustrup.bandwichpersistencedebugging.utilities.Printer;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ public abstract class JTest extends Asserter {
     /**
      * A default password, with the purpose of creating, logging in and various alike features.
      */
-    protected final String _password = "123456789%&";
+    protected String _password;
 
     /**
      * This Random is the java Random utility, that can be reused throughout tests.
@@ -49,6 +50,7 @@ public abstract class JTest extends Asserter {
      */
     @BeforeEach
     public void setup() {
+        _password = RandomCreatorService.get_instance().generatePassword();
         _items = new TestItems();
         begin();
     }

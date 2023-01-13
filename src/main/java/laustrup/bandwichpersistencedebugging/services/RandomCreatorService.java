@@ -1,7 +1,5 @@
 package laustrup.bandwichpersistencedebugging.services;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class RandomCreatorService {
@@ -29,16 +27,15 @@ public class RandomCreatorService {
     private RandomCreatorService() {}
 
     /**
-     * Generates a random string from a - z.
+     * Generates a random.
      * @return The generated string.
      */
-    public String generateString() {
-        int min = 97, // letter a
-            max = 122, // letter z
-            length = 28*2;
+    public String generateString(boolean uniqueCharacter, int length) {
+        int min = !uniqueCharacter ? 97 : 123, // letter a
+            max = !uniqueCharacter ? 122 : 122 * 2; // letter z
         StringBuilder buffer = new StringBuilder(length);
 
-        for (int i = 0; i < 28*2; i++)
+        for (int i = 0; i < length; i++)
             buffer.append((char) (min + (int) (_random.nextFloat() * (max - min + 1))));
 
         return buffer.toString();
@@ -63,6 +60,18 @@ public class RandomCreatorService {
         }
         else
             return string;
+    }
+
+    public String generatePassword() {
+        String password = new String();
+
+        password += generateString(false,5);
+        password += generateString(true, 2);
+        password += generateString(false,3);
+        password += generateString(true,2);
+        password += 1;
+
+        return password;
     }
 
     /**

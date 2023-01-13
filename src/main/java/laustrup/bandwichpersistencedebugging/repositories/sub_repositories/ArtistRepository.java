@@ -42,6 +42,7 @@ public class ArtistRepository extends Repository {
         try {
             ResultSet set = create("INSERT INTO users(" +
                         "username," +
+                        "email," +
                         "`password`," +
                         "first_name,last_name," +
                         "`description`," +
@@ -49,6 +50,7 @@ public class ArtistRepository extends Repository {
                         "kind) " +
                     "VALUES ('" +
                         artist.get_username() + "','" +
+                        artist.get_contactInfo().get_email() + "','" +
                         password + "','" +
                         artist.get_firstName() +"','" +
                         artist.get_lastName() +"','" +

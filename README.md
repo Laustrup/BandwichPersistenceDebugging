@@ -13,3 +13,4 @@ The original project can be found at [BandwichPersistence](https://github.com/La
 * Fixed a stackoverflow error of continuing reads of relation fields.
 * JDBC connection URL has ?allowMultiQueries=true added.
 * DTO objects have been created for better converting to and from application.
+* Unique keys for passwords of either username or email added.

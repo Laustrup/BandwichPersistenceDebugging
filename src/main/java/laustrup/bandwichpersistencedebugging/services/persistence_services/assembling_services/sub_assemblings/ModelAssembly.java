@@ -36,7 +36,7 @@ public class ModelAssembly {
 
     public ContactInfo assembleContactInfo(ResultSet set) throws SQLException {
         String table = "contact_informations";
-        return new ContactInfo(set.getString(table+".email"),
+        return new ContactInfo(set.getString("users.email"),
                 new Phone(new Country(set.getString(table+".country_title"),
                             Country.CountryIndexes.valueOf(set.getString(table+".country_indexes")),
                             set.getInt(table+".first_digits")),

@@ -143,7 +143,6 @@ public class ModelRepository extends Repository {
         if (contactInfo != null && contactInfo.get_primaryId() > 0)
             return edit("INSERT INTO contact_informations(" +
                         "user_id," +
-                        "email," +
                         "first_digits," +
                         "phone_number," +
                         "phone_is_mobile," +
@@ -156,7 +155,6 @@ public class ModelRepository extends Repository {
                     ") " +
                     "VALUES (" +
                         contactInfo.get_primaryId() + ",'" +
-                        contactInfo.get_email() + "'," +
                         contactInfo.get_country().get_firstPhoneNumberDigits() + "," +
                         contactInfo.get_phone().get_numbers() + "," +
                         contactInfo.get_phone().is_mobile() + ",'" +

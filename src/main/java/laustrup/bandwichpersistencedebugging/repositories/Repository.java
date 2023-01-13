@@ -56,7 +56,7 @@ public abstract class Repository {
                 if (doClose)
                     closeConnection();
                 return success;
-            } catch (SQLException e) { Printer.get_instance().print("Couldn't execute update...",e); }
+            } catch (SQLException e) { Printer.get_instance().print("Couldn't execute update...\n\n" + sql ,e); }
         return false;
     }
 
@@ -124,7 +124,7 @@ public abstract class Repository {
     public boolean exists(long id, String table, String column) {
         ResultSet set = read("SELECT * FROM " + table + " WHERE " + column + " = " + id + ";");
         try {
-            return !set.isAfterLast();
+            return set.next();
         } catch (SQLException e) {
             Printer.get_instance().print("ResultSet error in id exists...",e);
         }
