@@ -148,16 +148,16 @@ class UserCRUDTests extends JTest {
         );
         calculatePerformance();
 
-        //ASSERT
-        asserting(expected,actual,expected.get_authority());
-
-
         expected.set_description(prevDescription);
         UserPersistenceService.get_instance().update(
                 expected,
                 new Login(expected.get_username(),_password),
                 password
         );
+
+        //ASSERT
+        expected.set_description(postDescription);
+        asserting(expected,actual,expected.get_authority());
     }
 
     //TODO Fix test of card

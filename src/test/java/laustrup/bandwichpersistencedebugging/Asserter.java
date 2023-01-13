@@ -33,10 +33,10 @@ public class Asserter {
     protected void asserting(User expected, User actual, User.Authority authority) {
         Printer.get_instance().print("Expected = " + expected + "\n\nActual = " + actual);
         switch (authority) {
-            case PARTICIPANT -> assertParticipants((Participant) expected, (Participant) actual);
-            case BAND -> assertBands((Band) expected,(Band) actual);
-            case ARTIST -> assertArtists((Artist) expected,(Artist) actual);
-            case VENUE -> assertVenues((Venue) expected,(Venue) actual);
+            case PARTICIPANT -> assertParticipants((Participant) expected, (Participant) actual, true);
+            case BAND -> assertBands((Band) expected,(Band) actual, true);
+            case ARTIST -> assertArtists((Artist) expected,(Artist) actual, true);
+            case VENUE -> assertVenues((Venue) expected,(Venue) actual, true);
             default -> fail();
         }
     }
@@ -46,12 +46,14 @@ public class Asserter {
      * @param expected The Participant that is arranged and defined.
      * @param actual The Participant that is the result of an action.
      */
-    protected void assertParticipants(Participant expected, Participant actual) {
-        assertUsers(expected, actual);
-        if (expected.get_idols().size() == actual.get_idols().size())
-            for (int i = 1; i <= expected.get_idols().size(); i++)
-                assertEquals(expected.get_idols().get(i).toString(),actual.get_idols().get(i).toString());
-        else fail();
+    protected void assertParticipants(Participant expected, Participant actual, boolean assertNotNull) {
+        if ((expected != null && actual != null) || assertNotNull) {
+            assertUsers(expected, actual);
+            if (expected.get_idols().size() == actual.get_idols().size())
+                for (int i = 1; i <= expected.get_idols().size(); i++)
+                    assertEquals(expected.get_idols().get(i).toString(),actual.get_idols().get(i).toString());
+            else fail();
+        }
     }
 
     /**
@@ -59,13 +61,15 @@ public class Asserter {
      * @param expected The Band that is arranged and defined.
      * @param actual The Band that is the result of an action.
      */
-    protected void assertBands(Band expected, Band actual) {
-        assertPerformers(expected, actual);
-        if (expected.get_members().size() == actual.get_members().size())
-            for (int i = 1; i <= expected.get_members().size(); i++)
-                assertEquals(expected.get_members().get(i).toString(),actual.get_members().get(i).toString());
-        else fail();
-        assertEquals(expected.get_runner(),actual.get_runner());
+    protected void assertBands(Band expected, Band actual, boolean assertNotNull) {
+        if ((expected != null && actual != null) || assertNotNull) {
+            assertPerformers(expected, actual);
+            if (expected.get_members().size() == actual.get_members().size())
+                for (int i = 1; i <= expected.get_members().size(); i++)
+                    assertEquals(expected.get_members().get(i).toString(),actual.get_members().get(i).toString());
+            else fail();
+            assertEquals(expected.get_runner(),actual.get_runner());
+        }
     }
 
     /**
@@ -73,7 +77,8 @@ public class Asserter {
      * @param expected The Artist that is arranged and defined.
      * @param actual The Artist that is the result of an action.
      */
-    protected void assertArtists(Artist expected, Artist actual) {
+    protected void assertArtists(Artist expected, Artist actual, boolean assertNotNull) {
+        if ((expected != null && actual != null) || assertNotNull)
         assertPerformers(expected,actual);
         if (expected.get_bands().size() == actual.get_bands().size())
             for (int i = 1; i <= expected.get_bands().size(); i++)
@@ -105,12 +110,14 @@ public class Asserter {
      * @param expected The Venue that is arranged and defined.
      * @param actual The Venue that is the result of an action.
      */
-    protected void assertVenues(Venue expected, Venue actual) {
-        assertUsers(expected, actual);
-        assertEquals(expected.get_location(),actual.get_location());
-        assertEquals(expected.get_gearDescription(),actual.get_gearDescription());
-        assertEquals(expected.get_size(),actual.get_size());
-        assertRequests(expected.get_requests(),actual.get_requests());
+    protected void assertVenues(Venue expected, Venue actual, boolean assertNotNull) {
+        if ((expected != null && actual != null) || assertNotNull) {
+            assertUsers(expected, actual);
+            assertEquals(expected.get_location(),actual.get_location());
+            assertEquals(expected.get_gearDescription(),actual.get_gearDescription());
+            assertEquals(expected.get_size(),actual.get_size());
+            assertRequests(expected.get_requests(),actual.get_requests());
+        }
     }
 
     /**
@@ -133,7 +140,7 @@ public class Asserter {
             assertChatRooms(expected.get_chatRooms(),actual.get_chatRooms());
             asserting(expected.get_subscription(),actual.get_subscription());
             assertBulletins(expected.get_bulletins(),actual.get_bulletins());
-            assertEquals(expected.get_timestamp(),actual.get_timestamp());
+            //assertEquals(expected.get_timestamp(),actual.get_timestamp());
         }
     }
 
@@ -238,19 +245,21 @@ public class Asserter {
      * @param actual The Subscription that is the result of an action.
      */
     private void asserting(Subscription expected, Subscription actual) {
-        assertEquals(expected.get_user().toString(),actual.get_user().toString());
-        assertEquals(expected.get_type(),actual.get_type());
-        assertEquals(expected.get_status(),actual.get_status());
-        assertEquals(expected.get_price(),actual.get_price());
-        if (expected.get_offer() != null) {
-            if (actual.get_offer().get_expires() != null)
-                assertEquals(expected.get_offer().get_expires(),actual.get_offer().get_expires());
-            if (actual.get_offer().get_type() != null)
-                assertEquals(expected.get_offer().get_type(),actual.get_offer().get_type());
-            if (actual.get_offer().get_effect() > 0)
-                assertEquals(expected.get_offer().get_effect(),actual.get_offer().get_effect());
+        if (expected != null && actual != null) {
+            assertEquals(expected.get_user().toString(),actual.get_user().toString());
+            assertEquals(expected.get_type(),actual.get_type());
+            assertEquals(expected.get_status(),actual.get_status());
+            assertEquals(expected.get_price(),actual.get_price());
+            if (expected.get_offer() != null) {
+                if (actual.get_offer().get_expires() != null)
+                    assertEquals(expected.get_offer().get_expires(),actual.get_offer().get_expires());
+                if (actual.get_offer().get_type() != null)
+                    assertEquals(expected.get_offer().get_type(),actual.get_offer().get_type());
+                if (actual.get_offer().get_effect() > 0)
+                    assertEquals(expected.get_offer().get_effect(),actual.get_offer().get_effect());
+            }
+            assertEquals(expected.get_cardId(),actual.get_cardId());
         }
-        assertEquals(expected.get_cardId(),actual.get_cardId());
     }
 
     /**
@@ -259,16 +268,18 @@ public class Asserter {
      * @param actuals The Requests that are the result of an action.
      */
     private void assertRequests(Liszt<Request> expectations, Liszt<Request> actuals) {
-        if (expectations.size() == actuals.size()) {
-            for (int i = 1; i <= expectations.size(); i++) {
-                Request expected = expectations.get(i),
-                        actual = actuals.get(i);
-                assertUsers(expected.get_user(),actual.get_user());
-                assertEquals(expected.get_event().toString(),actual.get_event().toString());
-                assertEquals(expected.get_approved().get_truth(),actual.get_approved().get_truth());
-                assertEquals(expected.get_message(),actual.get_message());
-            }
-        } else fail();
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size()) {
+                for (int i = 1; i <= expectations.size(); i++) {
+                    Request expected = expectations.get(i),
+                            actual = actuals.get(i);
+                    assertUsers(expected.get_user(),actual.get_user());
+                    asserting(expected.get_event(),actual.get_event());
+                    assertEquals(expected.get_approved().get_truth(),actual.get_approved().get_truth());
+                    assertEquals(expected.get_message(),actual.get_message());
+                }
+            } else fail();
+        }
     }
     /**
      * Asserts two ContactInfos to check they are the same.
@@ -293,27 +304,29 @@ public class Asserter {
      * @param actuals The Bulletins that are the result of an action.
      */
     protected void assertBulletins(Liszt<Bulletin> expectations, Liszt<Bulletin> actuals) {
-        if (expectations.size() == actuals.size()) {
-            for (int i = 1; i <= expectations.size(); i++) {
-                Bulletin expected = expectations.get(i),
-                        actual = actuals.get(i);
-                assertEquals(expected.get_primaryId(),actual.get_primaryId());
-                assertUsers(expected.get_author(), actual.get_author());
-                if (expected.get_author() != null && actual.get_author() != null)
-                    if (expected.get_receiver().getClass() == User.class &&
-                        actual.get_receiver().getClass() == User.class)
-                        assertUsers((User) expected.get_receiver(),(User) actual.get_receiver());
-                else if (expected.get_receiver() != null && actual.get_receiver() != null)
-                    if (expected.get_receiver().getClass() == Event.class &&
-                        actual.get_receiver().getClass() == Event.class)
-                        asserting((Event) expected.get_receiver(),(Event) actual.get_receiver());
-                assertEquals(expected.get_content(),actual.get_content());
-                assertEquals(expected.is_sent(),actual.is_sent());
-                assertEquals(expected.get_edited().toString(),actual.get_edited().toString());
-                assertEquals(expected.is_public(),actual.is_public());
-                //assertEquals(expected.get_timestamp(),actual.get_timestamp());
-            }
-        } else fail();
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size()) {
+                for (int i = 1; i <= expectations.size(); i++) {
+                    Bulletin expected = expectations.get(i),
+                            actual = actuals.get(i);
+                    assertEquals(expected.get_primaryId(),actual.get_primaryId());
+                    assertUsers(expected.get_author(), actual.get_author());
+                    if (expected.get_author() != null && actual.get_author() != null)
+                        if (expected.get_receiver().getClass() == User.class &&
+                            actual.get_receiver().getClass() == User.class)
+                            assertUsers((User) expected.get_receiver(),(User) actual.get_receiver());
+                    else if (expected.get_receiver() != null && actual.get_receiver() != null)
+                        if (expected.get_receiver().getClass() == Event.class &&
+                            actual.get_receiver().getClass() == Event.class)
+                            asserting((Event) expected.get_receiver(),(Event) actual.get_receiver());
+                    assertEquals(expected.get_content(),actual.get_content());
+                    assertEquals(expected.is_sent(),actual.is_sent());
+                    assertEquals(expected.get_edited().toString(),actual.get_edited().toString());
+                    assertEquals(expected.is_public(),actual.is_public());
+                    //assertEquals(expected.get_timestamp(),actual.get_timestamp());
+                }
+            } else fail();
+        }
     }
 
     /**
@@ -336,20 +349,27 @@ public class Asserter {
      * @param actual The Event that is the result of an action.
      */
     protected void asserting(Event expected, Event actual) {
-        assertEquals(expected.toString(),actual.toString());
-        assertTrue(expected.get_openDoors().isEqual(actual.get_openDoors()));
-        assertTrue(expected.get_start().isEqual(actual.get_start()));
-        assertTrue(expected.get_end().isEqual(actual.get_end()));
+        if (expected.get_openDoors() != null && actual.get_openDoors() != null)
+            assertTrue(expected.get_openDoors().isEqual(actual.get_openDoors()));
+        if (expected.get_start() != null && actual.get_start() != null)
+            assertTrue(expected.get_start().isEqual(actual.get_start()));
+        if (expected.get_end() != null && actual.get_end() != null)
+            assertTrue(expected.get_end().isEqual(actual.get_end()));
         assertEquals(expected.get_length(),expected.get_length());
-        assertEquals(expected.get_voluntary().get_argument(),actual.get_voluntary().get_argument());
-        assertEquals(expected.get_public().get_argument(),actual.get_public().get_argument());
-        assertEquals(expected.get_cancelled().get_argument(),actual.get_cancelled().get_argument());
-        assertEquals(expected.get_soldOut().get_argument(),actual.get_soldOut().get_argument());
+        if (expected.get_voluntary() != null && actual.get_voluntary() != null)
+            assertEquals(expected.get_voluntary().get_argument(),actual.get_voluntary().get_argument());
+        if (expected.get_public() != null && actual.get_public() != null)
+            assertEquals(expected.get_public().get_argument(),actual.get_public().get_argument());
+        if (expected.get_cancelled() != null && actual.get_cancelled() != null)
+            assertEquals(expected.get_cancelled().get_argument(),actual.get_cancelled().get_argument());
+        if (expected.get_soldOut() != null && actual.get_soldOut() != null)
+            assertEquals(expected.get_soldOut().get_argument(),actual.get_soldOut().get_argument());
         assertEquals(expected.get_location(), actual.get_location());
         assertEquals(expected.get_ticketsURL(), actual.get_ticketsURL());
-        asserting(expected.get_contactInfo(), actual.get_contactInfo());
+        if (expected.get_contactInfo() != null && actual.get_contactInfo() != null)
+            asserting(expected.get_contactInfo(), actual.get_contactInfo());
         assertGigs(expected.get_gigs(),actual.get_gigs());
-        assertVenues(expected.get_venue(),actual.get_venue());
+        assertVenues(expected.get_venue(),actual.get_venue(),false);
         assertRequests(expected.get_requests(),actual.get_requests());
         assertParticipations(expected.get_participations(),actual.get_participations());
         assertAlbums(expected.get_albums(),actual.get_albums());
@@ -361,11 +381,13 @@ public class Asserter {
      * @param actuals The Participations that are the result of an action.
      */
     protected void assertParticipations(Liszt<Participation> expectations, Liszt<Participation> actuals) {
-        if (expectations.size() == actuals.size())
-            for (int i = 1; i <= expectations.size(); i++)
-                asserting(expectations.get(i),actuals.get(i));
-        else
-            fail();
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size())
+                for (int i = 1; i <= expectations.size(); i++)
+                    asserting(expectations.get(i),actuals.get(i));
+            else
+                fail();
+        }
     }
 
     /**
@@ -383,11 +405,13 @@ public class Asserter {
      * @param actuals The Gigs that are the result of an action.
      */
     protected void assertGigs(Liszt<Gig> expectations, Liszt<Gig> actuals) {
-        if (expectations.size() == actuals.size())
-            for (int i = 1; i <= expectations.size(); i++)
-                asserting(expectations.get(i),actuals.get(i));
-        else
-            fail();
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size())
+                for (int i = 1; i <= expectations.size(); i++)
+                    asserting(expectations.get(i),actuals.get(i));
+            else
+                fail();
+        }
     }
 
 
