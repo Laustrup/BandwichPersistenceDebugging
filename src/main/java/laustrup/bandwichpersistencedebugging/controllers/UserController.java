@@ -29,6 +29,7 @@ public class UserController {
 
     private final String _endpointDirectory = "/api/user/";
 
+    @GetMapping("/api") public String main() { return "This is the API of Bandwich"; }
     @PostMapping(value = _endpointDirectory + "login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<UserDTO>> logIn(@RequestBody LoginDTO login) {
         return UserControllerService.get_instance().get(new Login(login));

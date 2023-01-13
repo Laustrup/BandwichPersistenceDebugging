@@ -174,11 +174,10 @@ public class UserPersistenceService {
      * @return The updated User of database values.
      */
     public User update(User user, Login login, String password) {
-        if (login.passwordIsValid()) {
+        if (login.passwordIsValid())
             if (Assembly.get_instance().getUserUnassembled(login).get_primaryId() == user.get_primaryId())
                 if (UserRepository.get_instance().update(user, login, password))
                     return Assembly.get_instance().getUser(user.get_primaryId());
-        }
 
         return Assembly.get_instance().getUser(user.get_primaryId());
     }

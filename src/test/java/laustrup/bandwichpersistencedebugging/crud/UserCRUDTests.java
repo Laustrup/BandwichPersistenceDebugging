@@ -136,7 +136,7 @@ class UserCRUDTests extends JTest {
         User expected = Assembly.get_instance().getUser(1);
         String prevDescription = expected.get_description(),
             postDescription = "This is a new description",
-            password = RandomCreatorService.get_instance().generatePassword();
+            password = "laust_er_sej1";
 
         //ACT
         expected.set_description(postDescription);

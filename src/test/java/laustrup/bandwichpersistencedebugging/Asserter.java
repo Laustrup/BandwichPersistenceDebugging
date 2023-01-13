@@ -143,23 +143,25 @@ public class Asserter {
      * @param actuals The Albums that are the result of an action.
      */
     protected void assertAlbums(Liszt<Album> expectations, Liszt<Album> actuals) {
-        if (expectations.size() == actuals.size()) {
-            for (int i = 1; i <= expectations.size(); i++) {
-                Album expected = expectations.get(i),
-                        actual = actuals.get(i);
-                if (!expected.get_items().isEmpty() && !actual.get_items().isEmpty())
-                    for (int j = 1; j <= expected.get_items().size(); j++) {
-                        for (int k = 1; k <= expected.get_items().get(j).get_tags().size(); k++) {
-                            assertEquals(expected.get_items().get(j).get_tags().get(k).get_primaryId(),
-                                    actual.get_items().get(j).get_tags().get(k).get_primaryId());
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size()) {
+                for (int i = 1; i <= expectations.size(); i++) {
+                    Album expected = expectations.get(i),
+                            actual = actuals.get(i);
+                    if (!expected.get_items().isEmpty() && !actual.get_items().isEmpty())
+                        for (int j = 1; j <= expected.get_items().size(); j++) {
+                            for (int k = 1; k <= expected.get_items().get(j).get_tags().size(); k++) {
+                                assertEquals(expected.get_items().get(j).get_tags().get(k).get_primaryId(),
+                                        actual.get_items().get(j).get_tags().get(k).get_primaryId());
+                            }
+                                assertEquals(expected.get_items().get(j).get_endpoint(),actual.get_items().get(j).get_endpoint());
+                            if (expected.get_items().get(j).get_event() != null)
+                                assertEquals(expected.get_items().get(j).get_event().get_primaryId(),actual.get_items().get(j).get_primaryId());
+                            assertEquals(expected.get_items().get(j).get_kind(),actual.get_items().get(j).get_kind());
                         }
-                            assertEquals(expected.get_items().get(j).get_endpoint(),actual.get_items().get(j).get_endpoint());
-                        if (expected.get_items().get(j).get_event() != null)
-                            assertEquals(expected.get_items().get(j).get_event().get_primaryId(),actual.get_items().get(j).get_primaryId());
-                        assertEquals(expected.get_items().get(j).get_kind(),actual.get_items().get(j).get_kind());
-                    }
-            }
-        } else fail();
+                }
+            } else fail();
+        }
     }
 
     /**
@@ -168,20 +170,22 @@ public class Asserter {
      * @param actuals The Ratings that are the result of an action.
      */
     protected void assertRatings(Liszt<Rating> expectations, Liszt<Rating> actuals) {
-        if (expectations.size() == actuals.size()) {
-            for (int i = 1; i <= expectations.size(); i++) {
-                Rating expected = expectations.get(i),
-                        actual = actuals.get(i);
-                if (expected.get_appointed() != null && actual.get_appointed() != null)
-                    assertEquals(expected.get_appointed().get_primaryId(),actual.get_appointed().get_primaryId());
-                if (expected.get_judge() != null && actual.get_judge() != null)
-                    assertEquals(expected.get_judge().get_primaryId(),actual.get_judge().get_primaryId());
-                assertEquals(expected.get_value(),actual.get_value());
-                assertTrue((expected.get_value() <= 5 && expected.get_value() > 0)
-                        && (actual.get_value() <= 5 && actual.get_value() > 0));
-                assertEquals(expected.get_comment(),actual.get_comment());
-            }
-        } else fail();
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size()) {
+                for (int i = 1; i <= expectations.size(); i++) {
+                    Rating expected = expectations.get(i),
+                            actual = actuals.get(i);
+                    if (expected.get_appointed() != null && actual.get_appointed() != null)
+                        assertEquals(expected.get_appointed().get_primaryId(),actual.get_appointed().get_primaryId());
+                    if (expected.get_judge() != null && actual.get_judge() != null)
+                        assertEquals(expected.get_judge().get_primaryId(),actual.get_judge().get_primaryId());
+                    assertEquals(expected.get_value(),actual.get_value());
+                    assertTrue((expected.get_value() <= 5 && expected.get_value() > 0)
+                            && (actual.get_value() <= 5 && actual.get_value() > 0));
+                    assertEquals(expected.get_comment(),actual.get_comment());
+                }
+            } else fail();
+        }
     }
 
     /**
@@ -190,18 +194,20 @@ public class Asserter {
      * @param actuals The ChatRooms that are the result of an action.
      */
     protected void assertChatRooms(Liszt<ChatRoom> expectations, Liszt<ChatRoom> actuals) {
-        if (expectations.size() == actuals.size()) {
-            for (int i = 1; i <= expectations.size(); i++) {
-                ChatRoom expected = expectations.get(i),
-                        actual = actuals.get(i);
-                assertMails(expected.get_mails(),actual.get_mails());
-                for (int j = 1; j <= expected.get_chatters().size(); j++)
-                    assertEquals(expected.get_chatters().get(j).toString(),actual.get_chatters().get(j).toString());
-                assertEquals(expected.get_responsible().toString(),actual.get_responsible().toString());
-                assertEquals(expected.get_answeringTime(),actual.get_answeringTime());
-                assertEquals(expected.is_answered(),actual.is_answered());
-            }
-        } else fail();
+        if (expectations != null && actuals != null) {
+            if (expectations.size() == actuals.size()) {
+                for (int i = 1; i <= expectations.size(); i++) {
+                    ChatRoom expected = expectations.get(i),
+                            actual = actuals.get(i);
+                    assertMails(expected.get_mails(),actual.get_mails());
+                    for (int j = 1; j <= expected.get_chatters().size(); j++)
+                        assertEquals(expected.get_chatters().get(j).toString(),actual.get_chatters().get(j).toString());
+                    assertEquals(expected.get_responsible().toString(),actual.get_responsible().toString());
+                    assertEquals(expected.get_answeringTime(),actual.get_answeringTime());
+                    assertEquals(expected.is_answered(),actual.is_answered());
+                }
+            } else fail();
+        }
     }
 
     /**
@@ -257,7 +263,7 @@ public class Asserter {
             for (int i = 1; i <= expectations.size(); i++) {
                 Request expected = expectations.get(i),
                         actual = actuals.get(i);
-                assertEquals(expected.get_user().toString(),actual.get_user().toString());
+                assertUsers(expected.get_user(),actual.get_user());
                 assertEquals(expected.get_event().toString(),actual.get_event().toString());
                 assertEquals(expected.get_approved().get_truth(),actual.get_approved().get_truth());
                 assertEquals(expected.get_message(),actual.get_message());
@@ -270,13 +276,15 @@ public class Asserter {
      * @param actual The information that is the result of an action.
      */
     protected void asserting(ContactInfo expected, ContactInfo actual) {
-        assertEquals(expected.get_email(),actual.get_email());
-        assertEquals(expected.get_country().get_title(),actual.get_country().get_title());
-        assertEquals(expected.get_country().get_indexes(),actual.get_country().get_indexes());
-        assertEquals(expected.get_phone().get_country().get_firstPhoneNumberDigits(),actual.get_phone().get_country().get_firstPhoneNumberDigits());
-        assertEquals(expected.get_phone().get_numbers(),actual.get_phone().get_numbers());
-        assertEquals(expected.get_phone().is_mobile(),actual.get_phone().is_mobile());
-        assertEquals(expected.getAddressInfo(),actual.getAddressInfo());
+        if (expected != null && actual != null) {
+            assertEquals(expected.get_email(),actual.get_email());
+            assertEquals(expected.get_country().get_title(),actual.get_country().get_title());
+            assertEquals(expected.get_country().get_indexes(),actual.get_country().get_indexes());
+            assertEquals(expected.get_phone().get_country().get_firstPhoneNumberDigits(),actual.get_phone().get_country().get_firstPhoneNumberDigits());
+            assertEquals(expected.get_phone().get_numbers(),actual.get_phone().get_numbers());
+            assertEquals(expected.get_phone().is_mobile(),actual.get_phone().is_mobile());
+            assertEquals(expected.getAddressInfo(),actual.getAddressInfo());
+        }
     }
 
     /**

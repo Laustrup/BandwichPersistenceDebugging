@@ -97,7 +97,9 @@ public class Assembly extends Assembler {
      * @param login The Login of the User that is wished to be gathered.
      * @return The unassembled User.
      */
-    public User getUserUnassembled(Login login) { return userAssembling(UserAssembly.get_instance().assemble(login), false); }
+    public User getUserUnassembled(Login login) {
+        return userAssembling(UserAssembly.get_instance().assemble(login), false);
+    }
 
     /**
      * Will get all the Users.
