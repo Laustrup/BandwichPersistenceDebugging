@@ -135,7 +135,6 @@ public class EventDTO extends ModelDTO {
 
     public EventDTO(Event event) {
         super(event.get_primaryId(), event.get_title(), event.get_timestamp());
-
         description = event.get_description();
 
         if (event.get_gigs() != null) {

@@ -667,6 +667,9 @@ public class Event extends Model {
         _start = _gigs.isEmpty() ? null : _gigs.get(1).get_start();
         _end = _gigs.isEmpty() ? null : _gigs.get(1).get_end();
 
+        if ((_end != null && _start != null) && Duration.between(_end, _start).getSeconds() > 0)
+            throw new InputMismatchException();
+
         if (_start != null && _end != null)
             if (_end.isAfter(_start)) {
 
@@ -677,12 +680,9 @@ public class Event extends Model {
                     }
 
                 _length = Duration.between(_start, _end).toMillis();
-                return _length;
             }
 
-        _start = null;
-        _end = null;
-        throw new InputMismatchException();
+        return _length;
     }
 
     @Override

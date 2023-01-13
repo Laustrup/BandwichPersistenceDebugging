@@ -77,13 +77,11 @@ public class EventAssembly extends Assembler {
         Liszt<Event> events = new Liszt<>();
 
         try {
-            while (!set.isAfterLast()) {
-                if (set.isBeforeFirst())
-                    set.next();
+            while (set.next()) {
                 events.add(assemble(set, false));
             }
         } catch (SQLException e) {
-            Printer.get_instance().print("Couldn't assemble Events...", e);
+            Printer.get_instance().print("Couldn't assemble events...", e);
         }
 
         return events;
@@ -105,7 +103,7 @@ public class EventAssembly extends Assembler {
                 set.next();
             event = assemble(set);
         } catch (SQLException e) {
-            Printer.get_instance().print("Trouble assembling user...", e);
+            Printer.get_instance().print("Trouble assembling event...", e);
         }
 
         return event;

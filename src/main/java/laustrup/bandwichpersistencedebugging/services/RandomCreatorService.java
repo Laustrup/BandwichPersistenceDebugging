@@ -50,9 +50,19 @@ public class RandomCreatorService {
      * @return The generated substring.
      */
     public String generateSubString(String string) {
-        int start = _random.nextInt(string.length());
-        int end = _random.nextInt(string.length())+1;
-        return string.substring(start,end);
+        if (string.length() > 1) {
+            int start = _random.nextInt(string.length())+1;
+            int end = _random.nextInt(start)+1;
+
+            while (start>end) {
+                start = _random.nextInt(string.length())+1;
+                end = _random.nextInt(start)+1;
+            }
+
+            return string.substring(start,end);
+        }
+        else
+            return string;
     }
 
     /**

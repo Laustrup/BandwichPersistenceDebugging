@@ -105,9 +105,9 @@ public class UserRepository extends Repository {
     public ResultSet search(String query) {
         query = query.replaceAll("%","");
         return get("WHERE users.username LIKE '%" + query + "%' OR " +
-                "users.firstname LIKE '%" + query + "%' OR " +
-                "users.lastname LIKE '%" + query + "%' OR " +
-                "users.`description LIKE '%" + query + "%'");
+                "users.first_name LIKE '%" + query + "%' OR " +
+                "users.last_name LIKE '%" + query + "%' OR " +
+                "users.`description` LIKE '%" + query + "%'");
     }
 
     /**

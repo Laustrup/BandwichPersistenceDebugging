@@ -47,7 +47,7 @@ public class SubscriptionDTO extends ModelDTO {
     private Long cardId;
 
     public SubscriptionDTO(Subscription subscription) {
-        super(subscription.get_user().get_primaryId(), subscription.get_cardId(),
+        super(subscription.get_user().get_primaryId(), subscription.get_cardId() == null ? 0 : subscription.get_cardId(),
                 subscription.get_user().get_username()+"-Subscription: " + subscription.get_user().get_primaryId(),
                 subscription.get_timestamp());
         type = Type.valueOf(subscription.get_type().toString());

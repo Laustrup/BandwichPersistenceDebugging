@@ -17,12 +17,6 @@ public class SearchTests extends JTest {
         String query = RandomCreatorService.get_instance().generateSubString(
                 Assembly.get_instance().getUser(1).get_username()
         );
-        if (query == null)
-            query = RandomCreatorService.get_instance().generateSubString(
-                    Assembly.get_instance().getEvent(1).get_title()
-            );
-        if (query == null)
-            fail();
 
         //ACT
         begin();
@@ -30,6 +24,6 @@ public class SearchTests extends JTest {
         calculatePerformance("search " + query);
 
         //ARRANGE
-        assertTrue(search != null && (search.getEvents().length > 0 || search.getUsers().length > 0));
+        assertTrue(search != null && (search.getUsers().length > 0));
     }
 }

@@ -137,6 +137,7 @@ public class Assembly extends Assembler {
      * @return The assembled User.
      */
     private User userAssembling(User user, boolean willFinish) {
+        /*
         if (user != null) {
             if (user.getClass() == Artist.class ||
                     user.getClass() == Band.class) {
@@ -181,13 +182,17 @@ public class Assembly extends Assembler {
             user.setAlbumsAuthor();
             if (user.getClass() == Artist.class || user.getClass() == Band.class)
                 ((Performer) user).setAuthorOfAlbums();
+         */
 
             if (willFinish)
                 return finish(user);
             else
                 return user;
+        /*
         }
         return null;
+
+         */
     }
 
     /**
@@ -207,7 +212,9 @@ public class Assembly extends Assembler {
      * @param id The id of the Event that is wished to be assembled.
      * @return The unassembled Event.
      */
-    public Event getEventUnassembled(long id) { return assembling(EventAssembly.get_instance().assemble(id), false); }
+    public Event getEventUnassembled(long id) {
+        return assembling(EventAssembly.get_instance().assemble(id), false);
+    }
 
     /**
      * Will get all the Events.
