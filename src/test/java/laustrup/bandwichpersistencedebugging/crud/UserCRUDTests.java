@@ -41,7 +41,7 @@ class UserCRUDTests extends JTest {
     @Test
     void canUpsertBulletin() {
         //ARRANGE
-        Bulletin expected = _items.generateBulletins(Assembly.get_instance().getEvent(0))[0];
+        Bulletin expected = _items.generateBulletins(Assembly.get_instance().getEvent(1))[0];
 
         //ACT
         begin();

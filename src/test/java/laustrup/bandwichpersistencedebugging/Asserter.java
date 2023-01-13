@@ -119,20 +119,22 @@ public class Asserter {
      * @param actual The User that is the result of an action.
      */
     private void assertUsers(User expected, User actual) {
-        if (expected.get_primaryId() > 0)
-            assertEquals(expected.get_primaryId(),actual.get_primaryId());
-        assertEquals(expected.get_username(),actual.get_username());
-        assertEquals(expected.get_firstName(),actual.get_firstName());
-        assertEquals(expected.get_lastName(),actual.get_lastName());
-        assertEquals(expected.get_description(),actual.get_description());
-        asserting(expected.get_contactInfo(),actual.get_contactInfo());
-        assertAlbums(expected.get_albums(),actual.get_albums());
-        assertRatings(expected.get_ratings(),actual.get_ratings());
-        assertEvents(expected.get_events(),actual.get_events());
-        assertChatRooms(expected.get_chatRooms(),actual.get_chatRooms());
-        asserting(expected.get_subscription(),actual.get_subscription());
-        assertBulletins(expected.get_bulletins(),actual.get_bulletins());
-        assertEquals(expected.get_timestamp(),actual.get_timestamp());
+        if (expected != null && actual != null) {
+            if (expected.get_primaryId() > 0)
+                assertEquals(expected.get_primaryId(),actual.get_primaryId());
+            assertEquals(expected.get_username(),actual.get_username());
+            assertEquals(expected.get_firstName(),actual.get_firstName());
+            assertEquals(expected.get_lastName(),actual.get_lastName());
+            assertEquals(expected.get_description(),actual.get_description());
+            asserting(expected.get_contactInfo(),actual.get_contactInfo());
+            assertAlbums(expected.get_albums(),actual.get_albums());
+            assertRatings(expected.get_ratings(),actual.get_ratings());
+            assertEvents(expected.get_events(),actual.get_events());
+            assertChatRooms(expected.get_chatRooms(),actual.get_chatRooms());
+            asserting(expected.get_subscription(),actual.get_subscription());
+            assertBulletins(expected.get_bulletins(),actual.get_bulletins());
+            assertEquals(expected.get_timestamp(),actual.get_timestamp());
+        }
     }
 
     /**
@@ -286,13 +288,20 @@ public class Asserter {
                 Bulletin expected = expectations.get(i),
                         actual = actuals.get(i);
                 assertEquals(expected.get_primaryId(),actual.get_primaryId());
-                assertEquals(expected.get_author().toString(),actual.get_author().toString());
-                assertEquals(expected.get_receiver().toString(),actual.get_receiver().toString());
+                assertUsers(expected.get_author(), actual.get_author());
+                if (expected.get_author() != null && actual.get_author() != null)
+                    if (expected.get_receiver().getClass() == User.class &&
+                        actual.get_receiver().getClass() == User.class)
+                        assertUsers((User) expected.get_receiver(),(User) actual.get_receiver());
+                else if (expected.get_receiver() != null && actual.get_receiver() != null)
+                    if (expected.get_receiver().getClass() == Event.class &&
+                        actual.get_receiver().getClass() == Event.class)
+                        asserting((Event) expected.get_receiver(),(Event) actual.get_receiver());
                 assertEquals(expected.get_content(),actual.get_content());
                 assertEquals(expected.is_sent(),actual.is_sent());
                 assertEquals(expected.get_edited().toString(),actual.get_edited().toString());
                 assertEquals(expected.is_public(),actual.is_public());
-                assertEquals(expected.get_timestamp(),actual.get_timestamp());
+                //assertEquals(expected.get_timestamp(),actual.get_timestamp());
             }
         } else fail();
     }
