@@ -20,6 +20,7 @@ import laustrup.bandwichpersistencedebugging.services.TimeService;
 import laustrup.bandwichpersistencedebugging.services.persistence_services.assembling_services.sub_assemblings.user_assemblings.UserAssembly;
 import laustrup.bandwichpersistencedebugging.utilities.Liszt;
 import laustrup.bandwichpersistencedebugging.utilities.Plato;
+import laustrup.bandwichpersistencedebugging.utilities.Printer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -178,6 +179,9 @@ public class AssemblyHandler {
 
     public Liszt<ChatRoom> handleChatRooms(ResultSet set, Liszt<ChatRoom> chatRooms) throws SQLException {
         String table = "chat_rooms";
+
+        if (set.isBeforeFirst())
+            set.next();
 
         if (set.getLong(table+".id") > 0) {
             ChatRoom chatRoom = new ChatRoom(set.getLong(table+".id"),

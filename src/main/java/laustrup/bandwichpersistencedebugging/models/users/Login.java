@@ -36,7 +36,9 @@ public class Login {
     @Getter
     private LocalDateTime _timestamp;
 
-    public Login(LoginDTO login) { this(login.getUsername(), login.getPassword()); }
+    public Login(LoginDTO login) {
+        this(login.getUsername(), login.getPassword());
+    }
     public Login(String username, String password) {
         _username = username;
         _password = password;

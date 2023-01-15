@@ -79,7 +79,7 @@ public class AssemblyDescriber {
                         set.next();
                     chatRooms.add(UserAssembly.get_instance().assembleChatRoom(set));
                 } catch (SQLException e) {
-                    Printer.get_instance().print("Couldn't describe Users...", e);
+                    Printer.get_instance().print("Couldn't describe Chat rooms...", e);
                 }
             }
         }

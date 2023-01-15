@@ -45,9 +45,7 @@ public class BandAssembly extends UserAssembler {
         Liszt<Band> bands = new Liszt<>();
 
         if (set != null) {
-            while (!set.isAfterLast()) {
-                if (set.isBeforeFirst())
-                    set.next();
+            while (set.next()) {
                 bands.add(assemble(set, isTemplate));
             }
         }
@@ -89,14 +87,14 @@ public class BandAssembly extends UserAssembler {
 
                 if (!memberIds.contains(set.getLong("band_members.artist_id")))
                     memberIds.add(set.getLong("band_members.artist_id"));
-
             } while (set.next());
         }
+
 
         try {
             Band band = new Band(_id, _username, _description, _contactInfo, _albums, _ratings, _events, gigs, _chatRooms,
                     _subscription, _bulletins,
-                    isTemplate ? ArtistAssembly.get_instance().assembles(UserRepository.get_instance().get(memberIds),true) : new Liszt<>(),
+                    !isTemplate&&!memberIds.isEmpty() ? ArtistAssembly.get_instance().assembles(UserRepository.get_instance().get(memberIds),true) : new Liszt<>(),
                     runner, fans, idols, _timestamp);
 
             resetUserAttributes();

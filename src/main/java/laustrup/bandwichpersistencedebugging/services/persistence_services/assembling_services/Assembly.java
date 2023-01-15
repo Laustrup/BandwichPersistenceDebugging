@@ -260,7 +260,7 @@ public class Assembly extends Assembler {
             event.get_requests().set(i, requests.get(i));
         event.set_requestEvents();
         */
-        _describer.describeEvents(new Liszt<>(new Event[]{event}));
+        //_describer.describeEvents(new Liszt<>(new Event[]{event}));
 
         if (willFinish)
             return finish(event);

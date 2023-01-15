@@ -60,7 +60,7 @@ public class ModelRepository extends Repository {
 
         return read("SELECT * FROM chat_rooms " +
                 "INNER JOIN chatters ON chat_rooms.id = chatters.chat_room_id " +
-                "LEFT JOIN mails ON chat_rooms.id = mails.chat_room id " +
+                "LEFT JOIN mails ON chat_rooms.id = mails.chat_room_id " +
                 where + ";");
     }
 
@@ -272,7 +272,7 @@ public class ModelRepository extends Repository {
     public Long upsert(ChatRoom chatRoom) {
         boolean idExists = chatRoom.get_primaryId() > 0;
         try {
-            ResultSet set = create("INSERT INTO chat_room(" +
+            ResultSet set = create("INSERT INTO chat_rooms(" +
                         (idExists ? "id," : "") +
                         "title," +
                         "responsible_id," +
@@ -291,7 +291,7 @@ public class ModelRepository extends Repository {
             if (set.isBeforeFirst())
                 set.next();
 
-            long id = idExists ? chatRoom.get_primaryId() : set.getLong("id");
+            long id = idExists ? chatRoom.get_primaryId() : set.getLong(1);
 
             if (chatRoom.get_chatters().size() > 0)
                 if (insertChattersOf(new ChatRoom(

@@ -136,7 +136,7 @@ class UserCRUDTests extends JTest {
         User expected = Assembly.get_instance().getUser(1);
         String prevDescription = expected.get_description(),
             postDescription = "This is a new description",
-            password = "laust_er_sej1";
+            password = "laust!_er_sej1";
 
         //ACT
         expected.set_description(postDescription);
@@ -216,6 +216,8 @@ class UserCRUDTests extends JTest {
         begin();
         actual = UserPersistenceService.get_instance().upsert(expectedChatRoom);
         calculatePerformance("upsert update chat room");
+        expectedChatRoom.set_title(prevTitle);
+        UserPersistenceService.get_instance().upsert(expectedChatRoom);
 
         //ASSERT
         assertChatRooms(new Liszt<>(new ChatRoom[]{expectedChatRoom}), new Liszt<>(new ChatRoom[]{actual}));
@@ -225,9 +227,12 @@ class UserCRUDTests extends JTest {
         begin();
         actual = UserPersistenceService.get_instance().upsert(expectedMail);
         calculatePerformance("upsert update mail");
+        expectedMail.set_content(prevContent);
+        UserPersistenceService.get_instance().upsert(expectedMail);
 
         //ASSERT
         assertMails(new Liszt<>(new Mail[]{expectedMail}), new Liszt<>(new Mail[]{actual.get_mails().getLast()}));
+
     }
 
     @ParameterizedTest

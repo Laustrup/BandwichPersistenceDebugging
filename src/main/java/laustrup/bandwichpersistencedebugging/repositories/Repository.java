@@ -75,7 +75,7 @@ public abstract class Repository {
 
                 statement.executeUpdate();
                 return statement;
-            } catch (SQLException e) { Printer.get_instance().print("Couldn't execute update...",e); }
+            } catch (SQLException e) { Printer.get_instance().print("Couldn't execute create...\n\n" + sql,e); }
         return null;
     }
 

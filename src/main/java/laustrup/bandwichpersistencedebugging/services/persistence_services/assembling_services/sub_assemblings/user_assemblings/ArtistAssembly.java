@@ -48,6 +48,7 @@ public class ArtistAssembly extends UserAssembler {
                 if (set.isBeforeFirst())
                     set.next();
                 artists.add(assemble(set,isTemplate));
+                set.next();
             }
         }
 
@@ -96,7 +97,7 @@ public class ArtistAssembly extends UserAssembler {
 
         Artist artist = new Artist(_id, _username, _firstName, _lastName, _description, _contactInfo, _albums, _ratings, _events, gigs,
                 _chatRooms, _subscription, _bulletins,
-                isTemplate ? BandAssembly.get_instance().assembles(UserRepository.get_instance().get(bandIds), true) : new Liszt<>(),
+                !isTemplate&&!bandIds.isEmpty() ? BandAssembly.get_instance().assembles(UserRepository.get_instance().get(bandIds), true) : new Liszt<>(),
                 runner, fans, idols, requests, _timestamp);
 
         resetUserAttributes();

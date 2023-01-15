@@ -85,9 +85,7 @@ public class UserAssembly extends Assembler {
         Liszt<User> users = new Liszt<>();
 
         try {
-            while (!set.isAfterLast()) {
-                if (set.isBeforeFirst())
-                    set.next();
+            while (set.next()) {
                 users.add(assemble(set, false, isTemplate));
             }
         } catch (SQLException e) {
@@ -110,16 +108,21 @@ public class UserAssembly extends Assembler {
         User user = null;
 
         try {
-            if (preInitiate)
-                set.next();
+            if (!set.isAfterLast()) {
+                if (preInitiate)
+                    set.next();
 
-            switch (set.getString("users.kind")) {
-                case "BAND" -> user = BandAssembly.get_instance().assemble(set, isTemplate);
-                case "ARTIST" -> user = ArtistAssembly.get_instance().assemble(set,isTemplate);
-                case "VENUE" -> user = VenueAssembly.get_instance().assemble(set,isTemplate);
-                case "PARTICIPANT" -> user = ParticipantAssembly.get_instance().assemble(set,isTemplate);
+                switch (set.getString("users.kind")) {
+                    case "BAND" -> user = BandAssembly.get_instance().assemble(set, isTemplate);
+                    case "ARTIST" -> user = ArtistAssembly.get_instance().assemble(set,isTemplate);
+                    case "VENUE" -> user = VenueAssembly.get_instance().assemble(set,isTemplate);
+                    case "PARTICIPANT" -> user = ParticipantAssembly.get_instance().assemble(set,isTemplate);
+                }
             }
         } catch (SQLException e) {
+            Printer.get_instance().print("SQL Trouble assembling user...", e);
+        }
+        catch (Exception e) {
             Printer.get_instance().print("Trouble assembling user...", e);
         }
 
@@ -132,7 +135,7 @@ public class UserAssembly extends Assembler {
         Liszt<Mail> mails = new Liszt<>();
         Liszt<User> chatters = new Liszt<>();
         User responsible = assemble(set.getLong("chat_rooms.responsible_id"),false);
-        LocalDateTime timestamp = set.getTimestamp("chat_rooms.`timestamp`").toLocalDateTime();
+        LocalDateTime timestamp = set.getTimestamp("chat_rooms.timestamp").toLocalDateTime();
 
         do {
             if (id != set.getLong("chat_rooms.id"))
