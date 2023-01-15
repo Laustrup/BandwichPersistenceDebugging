@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin @RestController
+@CrossOrigin(origins = "*") @RestController
 public class VenueController {
 
     private final String _endpointDirectory = "/api/venue/";

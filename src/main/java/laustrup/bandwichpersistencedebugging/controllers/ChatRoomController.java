@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin @RestController
+@CrossOrigin(origins = "*") @RestController
 public class ChatRoomController {
 
     private final String _endpointDirectory = "/api/chat_room/";
